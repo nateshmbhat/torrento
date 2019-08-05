@@ -1,0 +1,5 @@
+name: qbittorrentApi
+description: An api wrapper for the qbittorrent web api.
+
+dependencies:
+  http: ^0.12.0+2
