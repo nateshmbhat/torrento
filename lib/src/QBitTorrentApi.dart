@@ -1,12 +1,13 @@
-import 'dart:async' ; 
-import 'dart:io' ; 
+import 'dart:async' ;
+import 'Session.dart'; 
+import 'package:http/http.dart' as http ; 
 
-
-class BitTorrentAPI {
+class QBitTorrentAPI {
+  /// API Doc at : https://github.com/qbittorrent/qBittorrent/wiki/Web-API-Documentation#general-information 
   String _serverIP ; 
   int _serverPort ; 
-  String _apiURL ; 
-  String _SID ; //obtained after login 
+  String _apiURL ;
+  Session session ; 
 
   final API_AUTH_LOGIN = '/auth/login' ; 
   final API_AUTH_LOGOUT = '/auth/logout' ; 
@@ -100,19 +101,27 @@ class BitTorrentAPI {
   final API_SEARCH_UPDATE_PLUGINS= '/search/updatePlugins' ; 
 
 
-  BitTorrentAPI(this._serverIP, this._serverPort){
-    _apiURL = '${_serverIP}:${_serverPort}/api/v2' ; 
+  QBitTorrentAPI(this._serverIP, this._serverPort){
+    _apiURL = 'http://${_serverIP}:${_serverPort}/api/v2' ; 
+    session = Session.getInstance() ; 
   }
 
 
-  Future getTorrents() async {
-    
-
+  /// Login to qbittorrent
+  ///   return true if login success else false 
+  Future<bool> login(String username , String password) async {
+    var resp = await session.post('${_apiURL}${API_AUTH_LOGIN}' , body: {'username':username , 'password' : password}) ;
+    return resp.statusCode == 200 ; 
   }
-  
+
+  Future<String> getVersion() async {
+    var resp = await session.get('${_apiURL}${API_APP_VERSION}') ;
+    return resp.body ; 
+  }
 }
 
-main(List<String> args) {
-  BitTorrentAPI obj = BitTorrentAPI('192.168.0.100', 8080) ; 
-  print(obj); 
+main(List<String> args) async {
+  QBitTorrentAPI obj = QBitTorrentAPI('192.168.0.100', 8080) ; 
+  print(await obj.login('natesh', 'password')?'Login Success':'') ; 
+  print(await obj.getVersion()) ; 
 }
