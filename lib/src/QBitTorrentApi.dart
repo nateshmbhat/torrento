@@ -156,6 +156,27 @@ class QBitTorrentAPI {
     var resp = await session.get('${_apiURL}${API_APP_WEBAPIVERSION}');
     return resp.body;
   }
+
+
+  ///return true on successful shutdown else false
+  Future<bool> shutdownApplication() async {
+    var resp = await session.get('${_apiURL}${API_APP_SHUTDOWN}');
+    return resp.statusCode==200;
+  }
+
+
+  ///returns the preferences object. To see all properties obtained , see the API doc
+  Future<dynamic> getPreferences() async {
+    var resp = await session.get('${_apiURL}${API_APP_PREFERENCES}');
+    return json.decode(resp.body);
+  }
+
+
+  ///set any particular preference. Only parameters that need to be changed are to be specified (not the while prefernces )
+  Future<bool> setPreferences(Map<String,dynamic> jsondata) async {
+    var resp = await session.post('${_apiURL}${API_APP_SET_PREFERENCES}' , body : {'json': json.encode(jsondata)} );
+    return resp.statusCode==200;
+  }
 }
 
 main(List<String> args) async {
@@ -164,6 +185,7 @@ main(List<String> args) async {
   print(await obj.getVersion());
   print(await obj.getDefaultSavePath());
   print(await obj.getWebApiVersion());
+  print(await obj.setPreferences({'max_active_downloads':10}));
 
   print(await obj.logout() ? 'Logout Success' : '');
   print(await obj.getVersion());
