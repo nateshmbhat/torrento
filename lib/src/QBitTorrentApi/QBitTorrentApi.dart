@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
-import 'Session.dart';
+import '../Session.dart';
 import 'package:http/http.dart' as http;
 
 class QBitTorrentAPI {
@@ -24,7 +24,7 @@ class QBitTorrentAPI {
   final API_LOG_MAIN = '/log/main';
   final API_LOG_PEER = '/log/peers';
 
-  final API_SYNC_maindata = '/sync/maindata';
+  final API_SYNC_MAINDATA = '/sync/maindata';
   final API_SYNC_TORRENT_PEERS = '/sync/torrentPeers';
 
   final API_TRANSFER_INFO = '/transfer/info';
@@ -34,6 +34,7 @@ class QBitTorrentAPI {
   final API_TRANSFER_SET_DOWNLOAD_LIMIT = '/transfer/setDownloadLimit';
   final API_TRANSFER_UPLOAD_LIMIT = '/transfer/uploadLimit';
   final API_TRANSFER_SET_UPLOAD_LIMIT = '/transfer/setUploadLimit';
+  final API_TRANSFER_BAN_PEERS= '/transfer/banPeers';
 
   final API_TORRENT_INFO = '/torrents/info';
   final API_TORRENT_PROPERTIES = '/torrents/properties';
@@ -104,11 +105,10 @@ class QBitTorrentAPI {
 
   QBitTorrentAPI(this._serverIP, this._serverPort) {
     _apiURL = 'http://${_serverIP}:${_serverPort}/api/v2';
-    session = Session.getInstance();
+    session = Session();
   }
 
-
-  /// AUTH methods
+  /// ======================== AUTH methods ==========================
 
   /// Login to qbittorrent
   ///   return true if login success else false
@@ -130,22 +130,18 @@ class QBitTorrentAPI {
     return resp.statusCode == 200;
   }
 
-
-  // APP API methods
+  /// ====================  APP API methods ==========================
 
   Future<String> getVersion() async {
     var resp = await session.get('${_apiURL}${API_APP_VERSION}');
     return resp.body;
   }
 
-
-
-  ///Only supported from qbittorrent 4.2.0+ 
+  ///Only supported from qbittorrent 4.2.0+
   Future<dynamic> getBuildInfo() async {
     var resp = await session.get('${_apiURL}${API_APP_BUILDINFO}');
-    print(resp.body) ; 
+    print(resp.body);
   }
-
 
   Future<String> getDefaultSavePath() async {
     var resp = await session.get('${_apiURL}${API_APP_DEFAULT_SAVE_PATH}');
@@ -157,13 +153,11 @@ class QBitTorrentAPI {
     return resp.body;
   }
 
-
   ///return true on successful shutdown else false
   Future<bool> shutdownApplication() async {
     var resp = await session.get('${_apiURL}${API_APP_SHUTDOWN}');
-    return resp.statusCode==200;
+    return resp.statusCode == 200;
   }
-
 
   ///returns the preferences object. To see all properties obtained , see the API doc
   Future<dynamic> getPreferences() async {
@@ -171,12 +165,128 @@ class QBitTorrentAPI {
     return json.decode(resp.body);
   }
 
-
   ///set any particular preference. Only parameters that need to be changed are to be specified (not the while prefernces )
-  Future<bool> setPreferences(Map<String,dynamic> jsondata) async {
-    var resp = await session.post('${_apiURL}${API_APP_SET_PREFERENCES}' , body : {'json': json.encode(jsondata)} );
-    return resp.statusCode==200;
+  Future<bool> setPreferences(Map<String, dynamic> jsondata) async {
+    var resp = await session.post('${_apiURL}${API_APP_SET_PREFERENCES}',
+        body: {'json': json.encode(jsondata)});
+    return resp.statusCode == 200;
   }
+
+  /// ===========================  Log api methods  ======================
+
+  Future<dynamic> getLog(
+      {bool normal = true,
+      bool info = true,
+      bool warning = true,
+      bool critical = true,
+      int last_known_id = -1}) async {
+    var resp = await session.post('${_apiURL}${API_LOG_MAIN}', body: {
+      'normal': json.encode(normal),
+      'info': info.toString(),
+      'warning': warning.toString(),
+      'critical': critical.toString(),
+      'last_known_id': last_known_id.toString()
+    });
+    return json.decode(resp.body);
+  }
+
+  Future<dynamic> getPeerLog({int last_known_id = -1}) async {
+    var resp = await session.post('${_apiURL}${API_LOG_PEER}',
+        body: {'last_known_id': last_known_id.toString()});
+    return json.decode(resp.body);
+  }
+
+  /// =======================  Sync api methods ======================
+  /// Sync API implements requests for obtaining changes since the last request. All Sync API methods are under "sync", e.g.: /api/v2/sync/methodName.
+
+  Future<dynamic> syncMainData({String responseId = '0'}) async {
+    var resp = await session
+        .post('${_apiURL}${API_SYNC_MAINDATA}', body: {'rid': responseId});
+    return json.decode(resp.body);
+  }
+
+/// Get Torrent Peers data
+  Future<dynamic> syncTorrentPeers(
+      {String responseId = '0', String torrentHash}) async {
+    var resp = await session.post('${_apiURL}${API_SYNC_TORRENT_PEERS}',
+        body: {'rid': responseId, 'hash': torrentHash});
+    return json.decode(resp.body);
+  }
+
+  /// =======================  Transfer api methods ======================
+  ///
+
+  ///Get global transfer info . This method returns info you usually see in qBt status bar.
+  Future<dynamic> getTransferInfo() async {
+    var resp = await session.get('${_apiURL}${API_TRANSFER_INFO}');
+    return json.decode(resp.body);
+  }
+
+  /// The response is 1 if alternative speed limits are enabled, 0 otherwise.
+  Future<String> getSpeedLimitsMode() async {
+    var resp =
+        await session.get('${_apiURL}${API_TRANSFER_SPEED_LIMITS_MODE}');
+    return resp.body ; 
+  }
+
+  Future<String> toggleSpeedLimitsMode() async {
+    var resp =
+        await session.post('${_apiURL}${API_TRANSFER_TOGGLE_SPEED_LIMITS}');
+    return resp.body ;
+  }
+
+/// The response is the value of current global download speed limit in bytes/second; this value will be zero if no limit is applied.
+  Future<String> getDownloadLimit() async {
+    var resp =
+        await session.get('${_apiURL}${API_TRANSFER_DOWNLOAD_LIMIT}');
+    return resp.body ; 
+  }
+
+/// The global download speed limit to set in bytes/second
+  Future<String> setDownloadLimit(int limit) async {
+    var resp =
+        await session.post('${_apiURL}${API_TRANSFER_SET_DOWNLOAD_LIMIT}' , body : {
+          'limit' : limit.toString()
+        });
+    return resp.body;
+  }
+
+
+/// The response is the value of current global upload speed limit in bytes/second; this value will be zero if no limit is applied.
+  Future<String> getUploadLimit() async {
+    var resp =
+        await session.get('${_apiURL}${API_TRANSFER_UPLOAD_LIMIT}');
+    return resp.body ; 
+  }
+
+/// The global upload speed limit to set in bytes/second
+  Future<String> setUploadLimit(int limit) async {
+    var resp =
+        await session.post('${_apiURL}${API_TRANSFER_SET_UPLOAD_LIMIT}' , body : {
+          'limit' : limit.toString()
+        });
+    return resp.body;
+  }
+
+
+///  The peer to ban, or multiple peers. Each peer is a colon-separated host:port
+  Future<String> banPeers(List<String> peers) async {
+    var resp =
+        await session.post('${_apiURL}${API_TRANSFER_BAN_PEERS}' , body : {
+            'peers' : peers.join('|')
+        });
+    return resp.body;
+  }
+
+
+
+
+
+
+
+
+
+
 }
 
 main(List<String> args) async {
@@ -185,7 +295,14 @@ main(List<String> args) async {
   print(await obj.getVersion());
   print(await obj.getDefaultSavePath());
   print(await obj.getWebApiVersion());
-  print(await obj.setPreferences({'max_active_downloads':10}));
+  // print(await obj.getPreferences());
+  print(await obj.setPreferences({'max_active_downloads': 10}));
+  print(await obj.getTransferInfo());
+  print(await obj.getSpeedLimitsMode());
+  print(await obj.toggleSpeedLimitsMode());
+  print(await obj.getDownloadLimit());
+  print(await obj.setDownloadLimit(10000));
+  print(await obj.getDownloadLimit());
 
   print(await obj.logout() ? 'Logout Success' : '');
   print(await obj.getVersion());

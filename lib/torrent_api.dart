@@ -1,1 +1,1 @@
-export 'src/QBitTorrentApi.dart' ; 
+export 'src/QBitTorrentApi/QBitTorrentApi.dart' ; 
