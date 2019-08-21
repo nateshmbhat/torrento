@@ -3,6 +3,14 @@ import 'dart:convert';
 import '../Session.dart';
 import 'package:http/http.dart' as http;
 
+
+
+enum TorrentFilter{
+  all , downloading  , completed , paused , active  , inactive , resumed
+}
+
+
+
 class QBitTorrentAPI {
   /// API Doc at : https://github.com/qbittorrent/qBittorrent/wiki/Web-API-Documentation#general-information
   String _serverIP;
@@ -50,7 +58,11 @@ class QBitTorrentAPI {
   final API_TORRENT_REANNOUNCE = '/torrents/reannounce';
   final API_TORRENT_ADD = '/torrents/add';
   final API_TORRENT_ADD_TRACKERS = '/torrents/addTrackers';
+  final API_TORRENT_ADD_PEERS = '/torrents/addPeers';
   final API_TORRENT_EDIT_TRACKERS = '/torrents/editTracker';
+
+  final API_TORRENT_REMOVE_TRACKERS = '/torrents/removeTrackers' ; 
+
   final API_TORRENT_INCREASE_PRIORITY = '/torrents/increasePrio';
   final API_TORRENT_DECREASE_PRIORITY = '/torrents/decreasePrio';
   final API_TORRENT_TOP_PRIORITY = '/torrents/topPrio';
@@ -282,6 +294,168 @@ class QBitTorrentAPI {
 
 
 
+  /// =======================  Torrent api methods ======================
+
+  /// Get a list of torrents based on the filters and applied parameters. See api docs for more info on response object
+  Future<dynamic> getTorrentList({TorrentFilter filter , String category , String sort , bool reverse , int limit , int offset , List<String> hashes}) async {
+    final Map<String,dynamic> body = {} ;
+    if(filter!=null) body['filter'] = filter.toString().split('.').last; 
+    if(category!=null) body['category'] = category ; 
+    if(sort!=null) body['sort'] = sort ; 
+    if(reverse!=null) body['reverse'] = reverse.toString() ; 
+    if(offset!=null) body['offset'] = offset.toString(); 
+    if(hashes!=null) body['hashes'] = hashes.join('|') ;
+    print('body  = ${body}');
+
+    var resp = await session.post('${_apiURL}${API_TORRENT_INFO}' , body :body );
+    return json.decode(resp.body) ;
+  }
+
+/// Get torrent generic properties
+  Future<dynamic> getTorrentProperties(String torrentHash) async {
+    var resp = await session.post('${_apiURL}${API_TORRENT_PROPERTIES}' , body :{'hash' : torrentHash});
+    if(resp.statusCode==404) return null ; 
+    return json.decode(resp.body) ; 
+  }
+
+
+  Future<dynamic> getTorrentTrackers(String torrentHash) async {
+    var resp = await session.post('${_apiURL}${API_TORRENT_TRACKERS}' , body :{'hash' : torrentHash});
+    if(resp.statusCode==404) return null ; 
+    return json.decode(resp.body) ; 
+  }
+
+  Future<dynamic> getTorrentWebSeeds(String torrentHash) async {
+    var resp = await session.post('${_apiURL}${API_TORRENT_WEBSEEDS}' , body :{'hash' : torrentHash});
+    if(resp.statusCode==404) return null ; 
+    return json.decode(resp.body) ; 
+  }
+
+  Future<dynamic> getTorrentContents(String torrentHash) async {
+    var resp = await session.post('${_apiURL}${API_TORRENT_FILES}' , body :{'hash' : torrentHash});
+    if(resp.statusCode==404) return null ; 
+    return json.decode(resp.body) ; 
+  }
+
+
+  Future<dynamic> getTorrentPieceStates(String torrentHash) async {
+    var resp = await session.post('${_apiURL}${API_TORRENT_PIECE_STATES}' , body :{'hash' : torrentHash});
+    if(resp.statusCode==404) return null ; 
+    return json.decode(resp.body) ; 
+  }
+
+Future<dynamic> getTorrentPieceHashes(String torrentHash) async {
+    var resp = await session.post('${_apiURL}${API_TORRENT_PIECE_HASHES}' , body :{'hash' : torrentHash});
+    if(resp.statusCode==404) return null ; 
+    return json.decode(resp.body) ; 
+  }
+
+
+
+/// pause some or all torrents . 
+/// param torrentHashes is an array of torrent hashes or ['all'] to pause all torrents
+Future<String> pauseTorrents(List<String> torrentHashs) async {
+    var resp = await session.post('${_apiURL}${API_TORRENT_PAUSE}' , body :{'hashes' : torrentHashs.join('|')});
+    return (resp.body) ; 
+  }
+
+
+/// param torrentHashes is an array of torrent hashes or ['all'] to resume all torrents
+Future<String> resumeTorrents(List<String> torrentHashs) async {
+    var resp = await session.post('${_apiURL}${API_TORRENT_RESUME}' , body :{'hashes' : torrentHashs.join('|')});
+    return (resp.body) ; 
+  }
+
+
+/// param torrentHashes is an array of torrent hashes or ['all'] to delete all torrents
+Future<String> deleteTorrents(List<String> torrentHashs , { bool deleteFilesOnDisk =false }) async {
+    var resp = await session.post('${_apiURL}${API_TORRENT_DELETE}' , body :{
+      'hashes' : torrentHashs.join('|') , 
+    'deleteFiles' : deleteFilesOnDisk.toString()
+    });
+    return (resp.body) ; 
+  }
+
+
+/// param torrentHashes is an array of torrent hashes or ['all'] to recheck all torrents
+Future<String> recheckTorrents(List<String> torrentHashs) async {
+    var resp = await session.post('${_apiURL}${API_TORRENT_RECHECK}' , body :{'hashes' : torrentHashs.join('|')});
+    return (resp.body) ; 
+  }
+
+/// param torrentHashes is an array of torrent hashes or ['all'] to reannounce all torrents
+Future<String> reannounceTorrents(List<String> torrentHashs) async {
+    var resp = await session.post('${_apiURL}${API_TORRENT_REANNOUNCE}' , body :{'hashes' : torrentHashs.join('|')});
+    return (resp.body) ; 
+  }
+
+
+
+/// Add new torrents
+///Params : 
+/// urls : list of URLs  
+///torrents : Raw data of torrent file. torrents can be presented multiple times.
+///Returns true if torrents added successfully else false
+Future<bool> addNewTorrents(List<String> urls , String torrents , {
+  String savepath , String cookie, String category , bool skip_checking =false , bool paused = false , bool root_folder = false , String rename , int uploadLimit , int downloadLimit , bool useAutoTMM , bool sequentialDownload = false , bool prioritizeFirstLastPiece = false
+}) async {
+    final Map<String,dynamic> body = {
+      'urls' : urls.join('%0A'), 'torrents' : torrents ,
+      'skip_checking':skip_checking , 'paused':paused , 'root_folder':root_folder , 'sequentialDownload':sequentialDownload , 'prioritizeFirstLastPiece':prioritizeFirstLastPiece} ; 
+
+    if(savepath!=null)body['savepath'] =savepath ; 
+    if(cookie!=null)body['cookie'] =cookie; 
+    if(category!=null)body['category'] =category; 
+    if(rename!=null)body['rename'] =rename; 
+    if(uploadLimit!=null)body['upLimit'] =uploadLimit.toString(); 
+    if(downloadLimit!=null)body['dlLimit'] =downloadLimit.toString(); 
+    if(useAutoTMM!=null)body['useAutoTMM'] =useAutoTMM.toString(); 
+
+    var resp = await session.post('${_apiURL}${API_TORRENT_ADD}' , body :body) ; 
+    return resp.statusCode==200 ;
+  }
+
+
+
+
+
+Future<bool> addTorrentTrackers(String torrentHash , List<String> trackers) async{
+    var resp = await session.post('${_apiURL}${API_TORRENT_ADD_TRACKERS}' , body :{
+      'hash' : torrentHash , 
+      'urls' : trackers.join('%0A')
+    }) ;
+    return resp.statusCode==200;
+}
+
+///See docs for response code meaning 
+Future<int> editTorrentTrackers(String torrentHash , List<String> oldTrackers ,List<String> newTrackers ) async{
+    var resp = await session.post('${_apiURL}${API_TORRENT_EDIT_TRACKERS}' , body :{
+      'hash' : torrentHash , 
+      'origUrl' : oldTrackers.join('%0A'),
+      'newUrl' : newTrackers.join('%0A')
+    }) ; 
+    return resp.statusCode; 
+}
+
+///See docs for response code meaning 
+Future<int> removeTorrentTrackers(String torrentHash , List<String> trackers) async{
+    var resp = await session.post('${_apiURL}${API_TORRENT_REMOVE_TRACKERS}' , body :{
+      'hash' : torrentHash , 
+      'urls' : trackers.join('|')
+    }) ;
+    return resp.statusCode;
+}
+
+
+/// Returns true if successfully added
+Future<bool> addTorrentPeers(List<String> torrentHashes , List<String> peers) async{
+    var resp = await session.post('${_apiURL}${API_TORRENT_ADD_PEERS}' , body :{
+      'hashes' : torrentHashes.join('|'), 
+      'peers' : peers.join('|')
+    }) ;
+    return resp.statusCode==200;
+}
+
 
 
 
@@ -301,8 +475,9 @@ main(List<String> args) async {
   print(await obj.getSpeedLimitsMode());
   print(await obj.toggleSpeedLimitsMode());
   print(await obj.getDownloadLimit());
-  print(await obj.setDownloadLimit(10000));
-  print(await obj.getDownloadLimit());
+  print(await obj.getTorrentList(filter: TorrentFilter.downloading)) ; 
+  print(await obj.getTorrentContents('038caafe66d920547062d25245456d88c2715895')) ; 
+
 
   print(await obj.logout() ? 'Logout Success' : '');
   print(await obj.getVersion());
