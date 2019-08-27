@@ -48,4 +48,9 @@ class UTorrentApi {
 
     return tokenResponse.statusCode == 200;
   }
+
+    /// Logs out the current user
+  void logOut() {
+    _session.sessionHeaders = {};
+  }
 }
