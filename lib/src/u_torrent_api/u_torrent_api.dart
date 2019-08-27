@@ -53,4 +53,16 @@ class UTorrentApi {
   void logOut() {
     _session.sessionHeaders = {};
   }
+
+    /// Pass in the [torrentHash], i.e. hash of the torrent file
+  /// to initiate it.
+  /// Returns Future<http.Response>
+  Future<http.Response> startTorrent(String torrentHash) async {
+    assert(torrentHash != null);
+
+    String url = '$baseUrl?action=start&hash=$torrentHash';
+    http.Response response = await _session.get(url);
+
+    return response;
+  }
 }
