@@ -40,7 +40,8 @@ class UTorrentApi {
 
     http.Response tokenResponse = await _session.get('${baseUrl}token.html');
 
-    String token = html.parse(tokenResponse?.body)?.getElementById('token')?.text;
+    String token =
+        html.parse(tokenResponse?.body)?.getElementById('token')?.text;
 
     _session.token = token;
 
@@ -49,14 +50,13 @@ class UTorrentApi {
     return tokenResponse.statusCode == 200;
   }
 
-    /// Logs out the current user
+  /// Logs out the current user
   void logOut() {
     _session.sessionHeaders = {};
   }
 
   /// Pass in the [torrentHash], i.e. hash of the torrent file
   /// to initiate it.
-  /// Returns Future<http.Response>
   Future<http.Response> startTorrent(String torrentHash) async {
     assert(torrentHash != null);
 
@@ -66,14 +66,11 @@ class UTorrentApi {
     return response;
   }
 
-  
   /// Pass in the [torrentHashes], i.e. list of hashed of the
   /// torrents files to initiate them.
-  ///
-  /// Returns Future<http.Response>
   Future<http.Response> startTorrents(List<String> torrentHashes) async {
     assert(torrentHashes != null);
-    assert(torrentHashes.length != 0); 
+    assert(torrentHashes.length != 0);
 
     String url = '$baseUrl?action=start';
 
@@ -83,6 +80,192 @@ class UTorrentApi {
 
     return response;
   }
+
+  /// Pass in the [torrentHash], i.e. hash of the torrent file
+  /// to stop it.
+  Future<http.Response> stopTorrent(String torrentHash) async {
+    assert(torrentHash != null);
+
+    String url = '$baseUrl?action=stop&hash=$torrentHash';
+    http.Response response = await _session.get(url);
+
+    return response;
+  }
+
+  /// Pass in the [torrentHashes], i.e. list of hashed of the
+  /// torrents files to initiate them.
+  Future<http.Response> stopTorrents(List<String> torrentHashes) async {
+    assert(torrentHashes != null);
+    assert(torrentHashes.length != 0);
+
+    String url = '$baseUrl?action=stop';
+
+    for (String torrentHash in torrentHashes) url += '&hash=$torrentHash';
+
+    http.Response response = await _session.get(url);
+
+    return response;
+  }
+
+  /// Pass in the [torrentHash], i.e. hash of the torrent file
+  /// to pause it.
+  Future<http.Response> pauseTorrent(String torrentHash) async {
+    assert(torrentHash != null);
+
+    String url = '$baseUrl?action=pause&hash=$torrentHash';
+    http.Response response = await _session.get(url);
+
+    return response;
+  }
+
+  /// Pass in the [torrentHashes], i.e. list of hashed of the
+  /// torrents files to pause them.
+  Future<http.Response> pauseTorrents(List<String> torrentHashes) async {
+    assert(torrentHashes != null);
+    assert(torrentHashes.length != 0);
+
+    String url = '$baseUrl?action=pause';
+
+    for (String torrentHash in torrentHashes) url += '&hash=$torrentHash';
+
+    http.Response response = await _session.get(url);
+
+    return response;
+  }
+
+  /// Pass in the [torrentHash], i.e. hash of the torrent file
+  /// to force-start it.
+  Future<http.Response> forceStartTorrent(String torrentHash) async {
+    assert(torrentHash != null);
+
+    String url = '$baseUrl?action=forcestart&hash=$torrentHash';
+    http.Response response = await _session.get(url);
+
+    return response;
+  }
+
+  /// Pass in the [torrentHashes], i.e. list of hashed of the
+  /// torrents files to force-start them.
+  Future<http.Response> forceStartTorrents(List<String> torrentHashes) async {
+    assert(torrentHashes != null);
+    assert(torrentHashes.length != 0);
+
+    String url = '$baseUrl?action=forcestart';
+
+    for (String torrentHash in torrentHashes) url += '&hash=$torrentHash';
+
+    http.Response response = await _session.get(url);
+
+    return response;
+  }
+  
+  
+  /// Pass in the [torrentHash], i.e. hash of the torrent file
+  /// to pause it.
+  Future<http.Response> unpauseTorrent(String torrentHash) async {
+    assert(torrentHash != null);
+
+    String url = '$baseUrl?action=unpause&hash=$torrentHash';
+    http.Response response = await _session.get(url);
+
+    return response;
+  }
+
+  /// Pass in the [torrentHashes], i.e. list of hashed of the
+  /// torrents files to pause them.
+  Future<http.Response> unpauseTorrents(List<String> torrentHashes) async {
+    assert(torrentHashes != null);
+    assert(torrentHashes.length != 0);
+
+    String url = '$baseUrl?action=unpause';
+
+    for (String torrentHash in torrentHashes) url += '&hash=$torrentHash';
+
+    http.Response response = await _session.get(url);
+
+    return response;
+  }
+
+  /// Pass in the [torrentHash], i.e. hash of the torrent file
+  /// to recheck it.
+  Future<http.Response> recheckTorrent(String torrentHash) async {
+    assert(torrentHash != null);
+
+    String url = '$baseUrl?action=recheck&hash=$torrentHash';
+    http.Response response = await _session.get(url);
+
+    return response;
+  }
+
+  /// Pass in the [torrentHashes], i.e. list of hashed of the
+  /// torrents files to recheck them.
+  Future<http.Response> recheckTorrents(List<String> torrentHashes) async {
+    assert(torrentHashes != null);
+    assert(torrentHashes.length != 0);
+
+    String url = '$baseUrl?action=recheck';
+
+    for (String torrentHash in torrentHashes) url += '&hash=$torrentHash';
+
+    http.Response response = await _session.get(url);
+
+    return response;
+  }
+
+  /// Pass in the [torrentHash], i.e. hash of the torrent file
+  /// to  remove it.
+  Future<http.Response> removeTorrent(String torrentHash) async {
+    assert(torrentHash != null);
+
+    String url = '$baseUrl?action=remove&hash=$torrentHash';
+    http.Response response = await _session.get(url);
+
+    return response;
+  }
+
+  /// Pass in the [torrentHashes], i.e. list of hashed of the
+  /// torrents files to remove them.
+  Future<http.Response> removeTorrents(List<String> torrentHashes) async {
+    assert(torrentHashes != null);
+    assert(torrentHashes.length != 0);
+
+    String url = '$baseUrl?action=remove';
+
+    for (String torrentHash in torrentHashes) url += '&hash=$torrentHash';
+
+    http.Response response = await _session.get(url);
+
+    return response;
+  }
+
+    /// Pass in the [torrentHash], i.e. hash of the torrent file
+  /// to  remove it.
+  Future<http.Response> removeTorrentAndData(String torrentHash) async {
+    assert(torrentHash != null);
+
+    String url = '$baseUrl?action=removedata&hash=$torrentHash';
+    http.Response response = await _session.get(url);
+
+    return response;
+  }
+
+  /// Pass in the [torrentHashes], i.e. list of hashed of the
+  /// torrents files to remove them.
+  Future<http.Response> removeTorrentsAndData(List<String> torrentHashes) async {
+    assert(torrentHashes != null);
+    assert(torrentHashes.length != 0);
+
+    String url = '$baseUrl?action=removedata';
+
+    for (String torrentHash in torrentHashes) url += '&hash=$torrentHash';
+
+    http.Response response = await _session.get(url);
+
+    return response;
+  }
+  
+
+
 
   
   /// A list of torrents being held on the server
