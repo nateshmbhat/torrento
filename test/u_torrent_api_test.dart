@@ -46,7 +46,9 @@ void main() {
   });
 
   group('Torrent List', () {
-    test('List All Torrents', () async {});
+    test('List All Torrents', () async {
+      expect(await uTorrentApi.torrentsList, isNotNull);
+    });
   });
 
   tearDown(() {
