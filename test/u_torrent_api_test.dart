@@ -10,7 +10,6 @@ void main() {
     await uTorrentApi.logIn(username: 'im_mzaink', password: 'admin');
   });
 
-  
   group('Authentication', () {
     test('LogIn Pass', () async {
       UTorrentApi logInPassObject =
@@ -29,7 +28,23 @@ void main() {
           isFalse);
     });
   });
-  
+
+  group('Actions', () {
+    test('Start', () async {});
+    test('Stop', () async {});
+    test('Pause', () async {});
+
+    test('Force-Start', () async {});
+
+    test('Unpause', () async {});
+
+    test('Recheck', () async {});
+
+    test('Remove', () async {});
+
+    test('Remove-data', () async {});
+  });
+
   tearDown(() {
     uTorrentApi = null;
   });
