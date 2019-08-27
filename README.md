@@ -1,9 +1,9 @@
 # Torrent-Api
 
-A **Dart package** that wraps various Web Apis for **controlling and managing torrent clients**.
+A **Dart package** that wraps various Web APIS for **controlling and managing torrent clients**.
 
 
 ### Supported Torrent Clients : 
-+ utorrent
-+ bittorrent
-+ qbittorrent
++ &mu;Torrent
++ BitTorrent
++ qBittorrent

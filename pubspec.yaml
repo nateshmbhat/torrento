@@ -1,5 +1,5 @@
 name: torrent_api
-description: An api wrapper for multiple torrent clients
+description: An API wrapper for multiple torrent clients
 
 dependencies:
   http: ^0.12.0+2
