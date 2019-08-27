@@ -54,13 +54,31 @@ class UTorrentApi {
     _session.sessionHeaders = {};
   }
 
-    /// Pass in the [torrentHash], i.e. hash of the torrent file
+  /// Pass in the [torrentHash], i.e. hash of the torrent file
   /// to initiate it.
   /// Returns Future<http.Response>
   Future<http.Response> startTorrent(String torrentHash) async {
     assert(torrentHash != null);
 
     String url = '$baseUrl?action=start&hash=$torrentHash';
+    http.Response response = await _session.get(url);
+
+    return response;
+  }
+
+  
+  /// Pass in the [torrentHashes], i.e. list of hashed of the
+  /// torrents files to initiate them.
+  ///
+  /// Returns Future<http.Response>
+  Future<http.Response> startTorrents(List<String> torrentHashes) async {
+    assert(torrentHashes != null);
+    assert(torrentHashes.length != 0); 
+
+    String url = '$baseUrl?action=start';
+
+    for (String torrentHash in torrentHashes) url += '&hash=$torrentHash';
+
     http.Response response = await _session.get(url);
 
     return response;
