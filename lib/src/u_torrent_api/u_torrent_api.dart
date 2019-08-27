@@ -263,11 +263,19 @@ class UTorrentApi {
 
     return response;
   }
-  
 
 
+  /// Pass in a torrent-url to initiate its download
+  Future<http.Response> addTorrentUrl(String torrentHash) async {
+    assert(torrentHash != null);
 
-  
+    String url = '$baseUrl?action=add-url&s=$torrentHash';
+
+    http.Response response = await _session.get(url);
+
+    return response;
+  }
+
   /// A list of torrents being held on the server
   Future<List<dynamic>> get torrentsList async {
     http.Response response = await _session.get('$baseUrl?list=1');
