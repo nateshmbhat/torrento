@@ -83,4 +83,14 @@ class UTorrentApi {
 
     return response;
   }
+
+  
+  /// A list of torrents being held on the server
+  Future<List<dynamic>> get torrentsList async {
+    http.Response response = await _session.get('$baseUrl?list=1');
+
+    log('[torrentsList] : statusCode : ${response.statusCode}, response-body: ${response.body}');
+
+    return json.decode(response.body)['torrents'];
+  }
 }
