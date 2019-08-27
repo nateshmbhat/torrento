@@ -3,7 +3,7 @@ import 'package:test/test.dart';
 
 void main() {
   UTorrentApi uTorrentApi;
-  String newTorrentLink;
+  String torrentLink;
   String torrentHash;
   List<String> torrentHashes;
 
@@ -19,8 +19,8 @@ void main() {
       'E5340FB5C061E4E53618F41B48D7E1CEA445BB02',
     ];
 
-    newTorrentLink =
-        'magnet:?xt=urn:btih:de01de3841a06043abe2c31fdff0abd0c36facc3&dn=Spiderman+Homecoming+2017+1080p+6CH+BluRay+x265-HETeam&tr=udp%3A%2F%2Ftracker.leechers-paradise.org%3A6969&tr=udp%3A%2F%2Ftracker.openbittorrent.com%3A80&tr=udp%3A%2F%2Fopen.demonii.com%3A1337&tr=udp%3A%2F%2Ftracker.coppersurfer.tk%3A6969&tr=udp%3A%2F%2Fexodus.desync.com%3A6969';
+    torrentLink =
+        'magnet:?xt=urn:btih:e5340fb5c061e4e53618f41b48d7e1cea445bb02&dn=Captain+Marvel+2019+NEW+HD-TS+X264+AC3-SeeHD&tr=udp%3A%2F%2Ftracker.leechers-paradise.org%3A6969&tr=udp%3A%2F%2Ftracker.openbittorrent.com%3A80&tr=udp%3A%2F%2Fopen.demonii.com%3A1337&tr=udp%3A%2F%2Ftracker.coppersurfer.tk%3A6969&tr=udp%3A%2F%2Fexodus.desync.com%3A69699';
   });
 
   group('Authentication', () {
@@ -77,12 +77,11 @@ void main() {
       expect((await uTorrentApi.forceStartTorrent(torrentHash)).statusCode,
           equals(200));
     });
-    
+
     test('Force-Start Many', () async {
       expect((await uTorrentApi.forceStartTorrents(torrentHashes)).statusCode,
           equals(200));
     });
-    
 
     test('Unpause', () async {
       expect((await uTorrentApi.unpauseTorrent(torrentHash)).statusCode,
@@ -118,10 +117,15 @@ void main() {
       expect((await uTorrentApi.removeTorrentAndData(torrentHash)).statusCode,
           equals(200));
     });
-  
+
     test('Remove-Data Many', () async {
-      expect((await uTorrentApi.removeTorrentsAndData(torrentHashes)).statusCode,
+      expect(
+          (await uTorrentApi.removeTorrentsAndData(torrentHashes)).statusCode,
           equals(200));
+    });
+
+    test('Add torrent', () async {
+      expect((await uTorrentApi.addTorrentUrl(torrentLink)).statusCode, equals(200));
     });
   });
 
