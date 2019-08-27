@@ -45,6 +45,10 @@ void main() {
     test('Remove-data', () async {});
   });
 
+  group('Torrent List', () {
+    test('List All Torrents', () async {});
+  });
+
   tearDown(() {
     uTorrentApi = null;
   });
