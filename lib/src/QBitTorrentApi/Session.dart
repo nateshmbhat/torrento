@@ -10,7 +10,7 @@ class Session {
 
   Future<http.Response> get(dynamic url, {Map<String, String> headers}) async {
     /// headers receives as per the headers arg is sent to the API>
-    http.Response response = await http.get(url, headers: headers);
+    http.Response response = await http.get(url, headers: sessionHeaders);
     _updateCookie(response);
     log('status : ${response.statusCode} , response body : ' + response.body) ; 
     return response ; 
