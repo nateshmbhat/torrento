@@ -7,7 +7,10 @@ import 'package:html/parser.dart' as html;
 import 'package:http/http.dart' as http;
 import 'package:torrent_api/src/u_torrent_api/session.dart';
 
-/// Instantiate [UTorrentApi] class to get access to a host of methods
+/// A wrapper class written around the WebUI API of uTorrent client.
+///
+/// Instantiate this class to get access to a host of methods
+/// aimed at the end-points so exposed.
 class UTorrentApi {
   final String serverIp;
   final int serverPort;
@@ -17,15 +20,22 @@ class UTorrentApi {
 
   Map<String, String> actions;
 
-  /// Expects serverIp and serverPort
-  /// of the uTorrent server
+  /// Please follow this
+  /// [link](https://github.com/SchizoDuckie/DuckieTV/wiki/Setting-up-uTorrent-Web-UI-with-DuckieTV)
+  /// to set-up WebUI from inside uTorrent.
   UTorrentApi({@required this.serverIp, @required this.serverPort})
       : baseUrl = 'http://$serverIp:$serverPort/gui/' {
     assert(serverIp != null);
     assert(serverPort != null);
   }
 
-  /// Pass-in username and password to log-in the user.
+  /// Pass-in username and password as
+  /// [set up](https://github.com/SchizoDuckie/DuckieTV/wiki/Setting-up-uTorrent-Web-UI-with-DuckieTV)
+  /// in your WebUI Settings
+  /// to log-in the user.
+  ///
+  /// Use guest's username, as per the set-up, and empty string(non-null) for password to log-in as guest.
+  /// Please know that guest users have limited access!
   ///
   /// Returns true on successful autentication, otherwise false.
   Future<bool> logIn({String username, String password}) async {
@@ -52,11 +62,11 @@ class UTorrentApi {
 
   /// Logs out the current user
   void logOut() {
-    _session.sessionHeaders = {};
+    _session.clearSession();
   }
 
   /// Pass in the [torrentHash], i.e. hash of the torrent file
-  /// to initiate it.
+  /// to initiate it (commences download).
   Future<http.Response> startTorrent(String torrentHash) async {
     assert(torrentHash != null);
 
@@ -66,8 +76,8 @@ class UTorrentApi {
     return response;
   }
 
-  /// Pass in the [torrentHashes], i.e. list of hashed of the
-  /// torrents files to initiate them.
+  /// Pass in the [torrentHashes], i.e. list of hashes of the
+  /// torrent files to initiate them all.
   Future<http.Response> startTorrents(List<String> torrentHashes) async {
     assert(torrentHashes != null);
     assert(torrentHashes.length != 0);
@@ -92,8 +102,8 @@ class UTorrentApi {
     return response;
   }
 
-  /// Pass in the [torrentHashes], i.e. list of hashed of the
-  /// torrents files to initiate them.
+  /// Pass in the [torrentHashes], i.e. list of hashes of the
+  /// torrent files to stop them all.
   Future<http.Response> stopTorrents(List<String> torrentHashes) async {
     assert(torrentHashes != null);
     assert(torrentHashes.length != 0);
@@ -118,8 +128,8 @@ class UTorrentApi {
     return response;
   }
 
-  /// Pass in the [torrentHashes], i.e. list of hashed of the
-  /// torrents files to pause them.
+  /// Pass in the [torrentHashes], i.e. list of hashes of the
+  /// torrent files to pause them.
   Future<http.Response> pauseTorrents(List<String> torrentHashes) async {
     assert(torrentHashes != null);
     assert(torrentHashes.length != 0);
@@ -144,8 +154,8 @@ class UTorrentApi {
     return response;
   }
 
-  /// Pass in the [torrentHashes], i.e. list of hashed of the
-  /// torrents files to force-start them.
+  /// Pass in the [torrentHashes], i.e. list of hashes of the
+  /// torrent files to force-start them.
   Future<http.Response> forceStartTorrents(List<String> torrentHashes) async {
     assert(torrentHashes != null);
     assert(torrentHashes.length != 0);
@@ -170,8 +180,8 @@ class UTorrentApi {
     return response;
   }
 
-  /// Pass in the [torrentHashes], i.e. list of hashed of the
-  /// torrents files to pause them.
+  /// Pass in the [torrentHashes], i.e. list of hashes of the
+  /// torrent files to pause them.
   Future<http.Response> unpauseTorrents(List<String> torrentHashes) async {
     assert(torrentHashes != null);
     assert(torrentHashes.length != 0);
@@ -196,8 +206,8 @@ class UTorrentApi {
     return response;
   }
 
-  /// Pass in the [torrentHashes], i.e. list of hashed of the
-  /// torrents files to recheck them.
+  /// Pass in the [torrentHashes], i.e. list of hashes of the
+  /// torrent files to recheck them.
   Future<http.Response> recheckTorrents(List<String> torrentHashes) async {
     assert(torrentHashes != null);
     assert(torrentHashes.length != 0);
@@ -222,8 +232,8 @@ class UTorrentApi {
     return response;
   }
 
-  /// Pass in the [torrentHashes], i.e. list of hashed of the
-  /// torrents files to remove them.
+  /// Pass in the [torrentHashes], i.e. list of hashes of the
+  /// torrent files to remove them.
   Future<http.Response> removeTorrents(List<String> torrentHashes) async {
     assert(torrentHashes != null);
     assert(torrentHashes.length != 0);
@@ -248,8 +258,8 @@ class UTorrentApi {
     return response;
   }
 
-  /// Pass in the [torrentHashes], i.e. list of hashed of the
-  /// torrents files to remove them.
+  /// Pass in the [torrentHashes], i.e. list of hashes of the
+  /// torrent files to remove them.
   Future<http.Response> removeTorrentsAndData(
       List<String> torrentHashes) async {
     assert(torrentHashes != null);
@@ -264,7 +274,7 @@ class UTorrentApi {
     return response;
   }
 
-  /// Pass in a torrent-url to initiate its download
+  /// Pass in a torrent-url to initiate its download.
   Future<http.Response> addTorrentUrl(String torrentHash) async {
     assert(torrentHash != null);
 
@@ -275,14 +285,14 @@ class UTorrentApi {
     return response;
   }
 
-  /// Pass in a torrent-url to initiate its download
+  /// Pass in a torrent-file path (on the server) to initiate its download.
   Future<http.StreamedResponse> addTorrentFile({String filePath}) async {
     assert(filePath != null);
 
     String url = '$baseUrl?action=add-file';
 
-    http.StreamedResponse response = await _session.multipartPost(
-        url: url, fieldName: 'torrent_file', path: filePath);
+    http.StreamedResponse response = await _session.multipartPost(url,
+        fieldName: 'torrent_file', path: filePath);
 
     print(response);
 

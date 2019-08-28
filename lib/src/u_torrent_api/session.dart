@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:developer';
 
 import 'package:http/http.dart' as http;
+import 'package:meta/meta.dart';
 
 const String contentType = 'application/json';
 
@@ -11,7 +12,7 @@ const String contentType = 'application/json';
 /// It stores tokens, cookies, authorization credentials and other
 /// required headers to be sent over and over to the client.
 class Session {
-  // Headers to be set :
+  // Headers to be set post authentication:
   // 1. authorization
   // 2. content-type
   // 3. cookie
@@ -21,9 +22,9 @@ class Session {
 
   Session() : sessionHeaders = {'content-type': 'application/json'};
 
-  /// Pass in a valid URL [url] and optionally, [headers] to fire a `get` request to
+  /// Pass in a valid URL [url] and optionally, [headers] to fire a `GET` request at
   /// the specified URL.
-  Future<http.Response> get(String url, {Map<String, String> headers}) async {
+  Future<http.Response> get(dynamic url, {Map<String, String> headers}) async {
     assert(url != null);
 
     if (_token != null) url = '${url}&token=$_token';
@@ -40,8 +41,8 @@ class Session {
     return res;
   }
 
-  /// Pass in URl [url], optionally headers, body and encoding (which defaults utf8) to
-  /// fire a `post` request at the specified url.
+  /// Pass in URL [url], optionally headers, body and encoding (which defaults to utf8) to
+  /// fire a `POST` request at the specified url.
   Future<http.Response> post(dynamic url,
       {Map<String, String> headers,
       Map<String, dynamic> body,
@@ -58,15 +59,14 @@ class Session {
     return response;
   }
 
-
-  /// Pass in URl [url] and optionally fieldName and path of the file to be sent.
-  /// This fires a multipart post at the specfied url
-  Future<http.StreamedResponse> multipartPost(
-      {String url, String fieldName, String path}) async {
+  /// Pass in URL [url] and optionally fieldName and path of the file to be sent.
+  /// This fires a multipart `POST` request at the specfied url.
+  Future<http.StreamedResponse> multipartPost(dynamic url,
+      {String fieldName, String path}) async {
     assert(url != null);
 
     if (_token != null) url += '&token=$_token';
-    
+
     Uri uri = Uri.parse(url);
 
     http.MultipartFile multipartFile =
@@ -85,6 +85,8 @@ class Session {
     return response;
   }
 
+  /// Utility function to extract a cookie, if present,
+  /// and add it to session headers.
   void _updateCookie(http.Response res) {
     String rawCookie = res.headers['set-cookie'];
 
@@ -96,4 +98,10 @@ class Session {
   }
 
   set token(String token) => _token = token;
+
+  /// Utility function to clear a session.
+  void clearSession() {
+    sessionHeaders.clear();
+    sessionHeaders['content-type'] = 'application/json';
+  }
 }
