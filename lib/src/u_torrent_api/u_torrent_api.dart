@@ -158,8 +158,7 @@ class UTorrentApi {
 
     return response;
   }
-  
-  
+
   /// Pass in the [torrentHash], i.e. hash of the torrent file
   /// to pause it.
   Future<http.Response> unpauseTorrent(String torrentHash) async {
@@ -238,7 +237,7 @@ class UTorrentApi {
     return response;
   }
 
-    /// Pass in the [torrentHash], i.e. hash of the torrent file
+  /// Pass in the [torrentHash], i.e. hash of the torrent file
   /// to  remove it.
   Future<http.Response> removeTorrentAndData(String torrentHash) async {
     assert(torrentHash != null);
@@ -251,7 +250,8 @@ class UTorrentApi {
 
   /// Pass in the [torrentHashes], i.e. list of hashed of the
   /// torrents files to remove them.
-  Future<http.Response> removeTorrentsAndData(List<String> torrentHashes) async {
+  Future<http.Response> removeTorrentsAndData(
+      List<String> torrentHashes) async {
     assert(torrentHashes != null);
     assert(torrentHashes.length != 0);
 
@@ -264,7 +264,6 @@ class UTorrentApi {
     return response;
   }
 
-
   /// Pass in a torrent-url to initiate its download
   Future<http.Response> addTorrentUrl(String torrentHash) async {
     assert(torrentHash != null);
@@ -272,6 +271,22 @@ class UTorrentApi {
     String url = '$baseUrl?action=add-url&s=$torrentHash';
 
     http.Response response = await _session.get(url);
+
+    return response;
+  }
+
+  /// Pass in a torrent-url to initiate its download
+  Future<http.StreamedResponse> addTorrentFile({String filePath}) async {
+    assert(filePath != null);
+
+    String url = '$baseUrl?action=add-file';
+
+    http.StreamedResponse response = await _session.multipartPost(
+        url: url, fieldName: 'torrent_file', path: filePath);
+
+    print(response);
+
+    log('[addTorrentFile]: statusCode : ${response.statusCode}, response-body: ${response.stream}');
 
     return response;
   }
