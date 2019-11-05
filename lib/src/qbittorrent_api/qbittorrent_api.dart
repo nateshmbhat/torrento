@@ -28,27 +28,36 @@ class QBitTorrentAPI implements IQbitTorrentApi  {
     _apiURL = 'http://${_serverIP}:${_serverPort}/api/v2';
     session = Session();
   }
+  
+  bool isStatusOk(http.Response response){
+    return response.statusCode==200 ; 
+  }
 
   /// ======================== AUTH methods ==========================
 
   /// Login to qbittorrent
   ///   return true if login success else false
+  @override
   Future login(String username, String password) async {
     var resp = await session.post('${_apiURL}${ApiEndPoint.API_AUTH_LOGIN}',
         body: {'username': username, 'password': password});
-    return resp.statusCode == 200;
+    if(!isStatusOk(resp)) throw InvalidCredentialsException;
   }
 
   /// Logout from qbittorrent
+  @override
   Future logout() async {
     var resp = await session.post('${_apiURL}${ApiEndPoint.API_AUTH_LOGOUT}');
-    if(resp.statusCode != 200) throw InvalidCredentialsException ; 
+    if(!isStatusOk(resp)) throw InvalidRequestException;
   }
+
+  @override 
+  
 
   /// return true if you are currently logged in
   Future<bool> isLoggedIn() async {
     var resp = await session.post('${_apiURL}${ApiEndPoint.API_APP_VERSION}');
-    return resp.statusCode == 200;
+    if(!isStatusOk(resp)) throw UnauthorsizedAccessException;
   }
 
   /// ====================  APP API methods ==========================
@@ -75,9 +84,9 @@ class QBitTorrentAPI implements IQbitTorrentApi  {
   }
 
   ///return true on successful shutdown else false
-  Future<bool> shutdownApplication() async {
+  Future shutdownApplication() async {
     var resp = await session.get('${_apiURL}${ApiEndPoint.API_APP_SHUTDOWN}');
-    return resp.statusCode == 200;
+    if(!isStatusOk(resp)) throw InvalidRequestException;
   }
 
   ///returns the preferences object. To see all properties obtained , see the API doc
@@ -260,19 +269,36 @@ Future<dynamic> getTorrentPieceHashes(String torrentHash) async {
   }
 
 
-
 /// pause some or all torrents . 
 /// param torrentHashes is an array of torrent hashes or ['all'] to pause all torrents
-Future<String> pauseTorrents(List<String> torrentHashs) async {
+@override
+Future pauseMultiple(List<String> torrentHashs) async {
     var resp = await session.post('${_apiURL}${ApiEndPoint.API_TORRENT_PAUSE}' , body :{'hashes' : torrentHashs.join('|')});
-    return (resp.body) ; 
+    if(!isStatusOk(resp)) throw InvalidParameterException ; 
+  }
+
+@override
+Future pause(String torrentHash) async {
+    var resp = await session.post('${_apiURL}${ApiEndPoint.API_TORRENT_PAUSE}' , body :{'hashes' : torrentHash});
+    if(!isStatusOk(resp)) throw InvalidParameterException ; 
   }
 
 
+
+@override
+Future resume(String torrentHash) async {
+    var resp = await session.post('${_apiURL}${ApiEndPoint.API_TORRENT_RESUME}' , body :{'hashes' : torrentHash});
+    if(resp.statusCode!=200) throw InvalidParameterException ; 
+  }
+
+
+
+
 /// param torrentHashes is an array of torrent hashes or ['all'] to resume all torrents
-Future<String> resumeTorrents(List<String> torrentHashs) async {
+@override
+Future resumeMultiple(List<String> torrentHashs) async {
     var resp = await session.post('${_apiURL}${ApiEndPoint.API_TORRENT_RESUME}' , body :{'hashes' : torrentHashs.join('|')});
-    return (resp.body) ; 
+    if(resp.statusCode!=200) throw InvalidParameterException ; 
   }
 
 
@@ -287,10 +313,19 @@ Future<String> deleteTorrents(List<String> torrentHashs , { bool deleteFilesOnDi
 
 
 /// param torrentHashes is an array of torrent hashes or ['all'] to recheck all torrents
-Future<String> recheckTorrents(List<String> torrentHashs) async {
+@override
+Future recheckMultiple(List<String> torrentHashs) async {
     var resp = await session.post('${_apiURL}${ApiEndPoint.API_TORRENT_RECHECK}' , body :{'hashes' : torrentHashs.join('|')});
-    return (resp.body) ; 
+    if(resp.statusCode!=200) throw InvalidParameterException ; 
+}
+
+@override
+Future recheck(String torrentHash) async {
+    var resp = await session.post('${_apiURL}${ApiEndPoint.API_TORRENT_RECHECK}' , body :{'hashes' : torrentHash});
+    if(resp.statusCode!=200) throw InvalidParameterException ; 
   }
+
+
 
 /// param torrentHashes is an array of torrent hashes or ['all'] to reannounce all torrents
 Future<String> reannounceTorrents(List<String> torrentHashs) async {
