@@ -15,7 +15,6 @@ main(List<String> args) async {
   print(await obj.getTorrentList(filter: TorrentFilter.downloading)) ; 
   print(await obj.getTorrentContents('038caafe66d920547062d25245456d88c2715895')) ; 
 
-
   print(await obj.logout() ? 'Logout Success' : '');
   print(await obj.getVersion());
 }
