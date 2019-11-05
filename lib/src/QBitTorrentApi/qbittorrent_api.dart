@@ -13,7 +13,7 @@ enum TorrentFilter{
 
 
 
-class QBitTorrentAPI {
+class QBitTorrentAPI implements IQbitTorrentApi  {
   /// API Doc at : https://github.com/qbittorrent/qBittorrent/wiki/Web-API-Documentation#general-information
   String _serverIP;
   int _serverPort;
