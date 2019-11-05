@@ -6,6 +6,7 @@ abstract class ICommonTorrentFunctions {
   Future logout() ; //return true if success 
   Future start(String torrentHash) ; 
   Future pause(String torrentHash) ; 
+  Future stop(String torrentHash) ; 
   Future resume(String torrentHash) ; 
   Future remove(String torrentHash); 
   Future recheck(String torrentHash) ; 
@@ -15,6 +16,7 @@ abstract class ICommonTorrentFunctions {
   Future recheckMultiple(List<String>torrentHashes) ; 
   Future removeMultiple(List<String>torrentHashes) ;
   Future resumeMultiple(List<String>torrentHashes) ; 
+  Future stopMultiple(List<String>torrentHashes) ; 
 } 
 
 abstract class IQbitTorrentApi extends ICommonTorrentFunctions{

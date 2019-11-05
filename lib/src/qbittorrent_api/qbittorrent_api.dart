@@ -51,10 +51,10 @@ class QBitTorrentAPI implements IQbitTorrentApi  {
     if(!isStatusOk(resp)) throw InvalidRequestException;
   }
 
-  @override 
   
 
   /// return true if you are currently logged in
+  @override 
   Future<bool> isLoggedIn() async {
     var resp = await session.post('${_apiURL}${ApiEndPoint.API_APP_VERSION}');
     if(!isStatusOk(resp)) throw UnauthorsizedAccessException;
@@ -301,16 +301,33 @@ Future resumeMultiple(List<String> torrentHashs) async {
     if(resp.statusCode!=200) throw InvalidParameterException ; 
   }
 
-
-/// param torrentHashes is an array of torrent hashes or ['all'] to delete all torrents
-Future<String> deleteTorrents(List<String> torrentHashs , { bool deleteFilesOnDisk =false }) async {
+@override
+Future remove(String torrentHash) async {
     var resp = await session.post('${_apiURL}${ApiEndPoint.API_TORRENT_DELETE}' , body :{
-      'hashes' : torrentHashs.join('|') , 
-    'deleteFiles' : deleteFilesOnDisk.toString()
+      'hashes' : torrentHash , 
     });
-    return (resp.body) ; 
+    if(resp.statusCode!=200) throw InvalidParameterException ; 
   }
 
+
+
+/// param torrentHashes is an array of torrent hashes or ['all'] to delete all torrents
+@override
+Future removeMultiple(List<String> torrentHashs) async {
+    var resp = await session.post('${_apiURL}${ApiEndPoint.API_TORRENT_DELETE}' , body :{
+      'hashes' : torrentHashs.join('|') , 
+    });
+    if(resp.statusCode!=200) throw InvalidParameterException ; 
+  }
+
+@override
+Future removeMultipleTorrentsWithData(List<String> torrentHashs) async {
+    var resp = await session.post('${_apiURL}${ApiEndPoint.API_TORRENT_DELETE}' , body :{
+      'hashes' : torrentHashs.join('|') , 
+    'deleteFiles' : 'true'
+    });
+    if(resp.statusCode!=200) throw InvalidParameterException ; 
+  }
 
 /// param torrentHashes is an array of torrent hashes or ['all'] to recheck all torrents
 @override
@@ -399,5 +416,25 @@ Future<bool> addTorrentPeers(List<String> torrentHashes , List<String> peers) as
     }) ;
     return resp.statusCode==200;
 }
+
+  @override
+  Future start(String torrentHash) async {
+    resume(torrentHash) ; 
+  }
+
+  @override
+  Future startMultiple(List<String> torrentHashes) async {
+    resumeMultiple(torrentHashes);
+  }
+
+  @override
+  Future stop(String torrentHash) async {
+    pause(torrentHash);
+  }
+
+  @override
+  Future stopMultiple(List<String> torrentHashes) async {
+    pauseMultiple(torrentHashes) ; 
+  }
 
 }

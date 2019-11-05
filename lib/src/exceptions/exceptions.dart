@@ -1,20 +1,30 @@
+import 'package:http/http.dart';
+
 class InvalidParameterException implements Exception{
-  final String cause ; 
-  InvalidParameterException(this.cause) ; 
+  String cause ; 
+  Response response ; 
+  InvalidParameterException.fromCause(this.cause) ; 
+  InvalidParameterException(this.response) ; 
 }
 
 class InvalidCredentialsException implements Exception{
-  final String cause ; 
-  InvalidCredentialsException(this.cause) ; 
+  String cause ; 
+  Response response  ; 
+  InvalidCredentialsException.fromCause(this.cause) ; 
+  InvalidCredentialsException(this.response) ; 
 }
 
 
 class UnauthorsizedAccessException implements Exception{
-  final String cause ; 
-  UnauthorsizedAccessException(this.cause) ; 
+  String cause ; 
+  Response response  = null; 
+  UnauthorsizedAccessException.fromCause(this.cause) ; 
+  UnauthorsizedAccessException(this.response); 
 }
 
 class InvalidRequestException implements Exception{
-  final String cause ; 
-  InvalidRequestException(this.cause) ; 
+  Response response ; 
+  String cause  ;
+  InvalidRequestException(this.response) ; 
+  InvalidRequestException.fromCause(this.cause) ; 
 }
