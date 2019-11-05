@@ -1,4 +1,4 @@
-import 'package:torrent_api/src/QBitTorrentApi/QBitTorrentApi.dart';
+import 'package:torrent_api/src/qbittorrent_api/qbittorrent_api.dart';
 
 main(List<String> args) async {
   QBitTorrentAPI obj = QBitTorrentAPI('192.168.0.100', 8080);

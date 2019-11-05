@@ -1,9 +1,13 @@
 import 'dart:async';
 import 'dart:convert';
-import 'package:torrent_api/src/QBitTorrentApi/Utils.dart';
+import 'package:torrent_api/src/exceptions/exceptions.dart';
+import 'package:torrent_api/src/qbittorrent_api/session.dart';
+import 'package:torrent_api/src/interfaces/torrent_interface.dart';
 
-import './Session.dart';
+import './session.dart';
 import 'package:http/http.dart' as http;
+
+import 'utils.dart';
 
 
 
@@ -29,16 +33,16 @@ class QBitTorrentAPI implements IQbitTorrentApi  {
 
   /// Login to qbittorrent
   ///   return true if login success else false
-  Future<bool> login(String username, String password) async {
+  Future login(String username, String password) async {
     var resp = await session.post('${_apiURL}${ApiEndPoint.API_AUTH_LOGIN}',
         body: {'username': username, 'password': password});
     return resp.statusCode == 200;
   }
 
   /// Logout from qbittorrent
-  Future<bool> logout() async {
+  Future logout() async {
     var resp = await session.post('${_apiURL}${ApiEndPoint.API_AUTH_LOGOUT}');
-    return resp.statusCode == 200;
+    if(resp.statusCode != 200) throw InvalidCredentialsException ; 
   }
 
   /// return true if you are currently logged in

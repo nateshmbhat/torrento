@@ -1,21 +1,21 @@
 import 'package:test/test.dart';
-import 'package:torrent_api/src/exceptions/InvalidParameterException.dart' as prefix0;
+import 'package:torrent_api/src/exceptions/exceptions.dart' as prefix0;
 
 abstract class ICommonTorrentFunctions {
-  Future<bool> login(String username , String password) ; //return true if login success
-  Future<bool> logout() ; //return true if success 
-  void resume(String torrentHash) ; 
-  void pause(String torrentHash) ; 
-  void stop(String torrentHash) ; 
-  void remove(String torrentHash); 
+  Future login(String username , String password) ; //return true if login success
+  Future logout() ; //return true if success 
+  Future resume(String torrentHash) ; 
+  Future pause(String torrentHash) ; 
+  Future stop(String torrentHash) ; 
+  Future remove(String torrentHash); 
 
-  void recheck(String torrentHash); 
+  Future recheck(String torrentHash); 
 
-  void startMultiple(List<String>torrentHashes) ; 
-  void recheckMultiple(List<String>torrentHashes) ; 
-  void removeMultiple(List<String>torrentHashes) ;
-  void resumeMultiple(List<String>torrentHashes) ; 
-  void stopMultiple(List<String>torrentHashes) ; 
+  Future startMultiple(List<String>torrentHashes) ; 
+  Future recheckMultiple(List<String>torrentHashes) ; 
+  Future removeMultiple(List<String>torrentHashes) ;
+  Future resumeMultiple(List<String>torrentHashes) ; 
+  Future stopMultiple(List<String>torrentHashes) ; 
 } 
 
 abstract class IQbitTorrentApi extends ICommonTorrentFunctions{
