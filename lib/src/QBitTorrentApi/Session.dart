@@ -1,11 +1,12 @@
 import 'dart:convert';
 import 'dart:developer';
 
-import 'package:http/http.dart' as http ; 
+import 'package:http/http.dart' as http ;
+import 'package:torrent_api/src/interfaces/session.dart'; 
 
 
 ///Singleton Session class to handle cookies
-class Session {
+class Session implements IQbitTorrentSession {
   Map<String, String> sessionHeaders = {};
 
   Future<http.Response> get(dynamic url, {Map<String, String> headers}) async {
