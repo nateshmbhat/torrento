@@ -72,16 +72,16 @@ abstract class QbitTorrentApiInterface extends CommonTorrentFunctionsInterface {
   Future<String> toggleSpeedLimitsMode();
 
   /// The response is the value of current global download speed limit in bytes/second; this value will be zero if no limit is applied.
-  Future<String> getDownloadLimit();
+  Future<String> getTransferDownloadLimit();
 
   /// The global download speed limit to set in bytes/second
-  Future<String> setDownloadLimit(int limit);
+  Future<String> setTransferDownloadLimit(int limit);
 
   /// The response is the value of current global upload speed limit in bytes/second; this value will be zero if no limit is applied.
-  Future<String> getUploadLimit();
+  Future<String> getTransferUploadLimit();
 
   /// The global upload speed limit to set in bytes/second
-  Future<String> setUploadLimit(int limit);
+  Future<String> setTransferUploadLimit(int limit);
 
   ///  The peer to ban, or multiple peers. Each peer is a colon-separated host:port
   Future<String> banPeers(List<String> peers);
@@ -141,6 +141,79 @@ abstract class QbitTorrentApiInterface extends CommonTorrentFunctionsInterface {
   Future<int> removeTorrentTrackers(String torrentHash, List<String> trackers);
 
   Future<bool> addTorrentPeers(List<String> torrentHashes, List<String> peers);
+
+  /// Increase priority of one or more hashes or ['all'] hashes
+  Future increasePriority(List<String> torrentHashes);
+
+  /// Decrease priority of one or more hashes or ['all'] hashes
+  Future decreasePriority(List<String> torrentHashes);
+
+  /// Set max priority to specified torrents
+  Future setMaxPriority(List<String> torrentHashes);
+
+  /// Set min priority to specified torrents
+  Future setMinPriority(List<String> torrentHashes);
+
+  /// Set file priority of a specific torrent
+  /// Params :
+  /// [torrentHash] is the hash of torrent
+  /// [fileIds] is a list of ids 0 for first file , 1 for next and so on.
+  /// [priority] can take the following :
+  /// Possible values of priority:
+  /// Value	  Description
+  /// 0	      Do not download
+  /// 1	      Normal priority
+  /// 6	      High priority
+  /// 7	      Maximal priority
+  Future setfilePriority(
+      String torrentHash, List<String> fileIds, int priority);
+
+  Future<dynamic> getDownloadLimit(List<String> torrentHashes) ; 
+  Future setDownloadLimit(List<String> torrentHashes , int limitInBytesPerSecond) ; 
+
+
+  Future setShareLimit(List<String> torrentHashes , double ratioLimit, int seedingTimeLimit ) ; 
+
+  Future<dynamic> getUploadLimit(List<String> torrentHashes);
+  Future setUploadLimit(List<String> torrentHashes , int limitInBytesPerSecond);
+
+
+  Future setDownloadLocation(List<String> torrentHashes , String location);
+
+
+  Future setTorrentName(String torrentHash, String name);
+
+  Future setCategory(List<String> torrentHashes, String category);
+
+  Future<dynamic> getAllCategories();
+
+  Future addNewCategory(String category , String savePath);
+
+  Future editCategory(String category , String newSavePath);
+
+  Future removeCategories(List<String> categories) ; 
+
+  Future addTorrentTags(List<String>torrentHashes,List<String> tags) ; 
+
+
+  Future removeTorrentTags(List<String>torrentHashes,List<String> tags) ; 
+
+  Future<dynamic> getAllTags();
+
+  Future createTags(List<String> tags); 
+
+  Future deleteTags(List<String> tags); 
+
+  Future setAutoTorrentManagement(List<String> torrentHashes , bool enable );
+
+  Future toggleSequentialDownload(List<String> torrentHashes) ; 
+
+  Future setFirstOrLastPiecePriority(List<String> torrentHashes) ;
+
+  Future setForceStart(List<String> torrentHashes , bool value);
+
+  Future setSuperSeeding(List<String> torrentHashes,bool value) ; 
+
 }
 
 abstract class UTorrentApiInterface extends CommonTorrentFunctionsInterface {}

@@ -170,14 +170,14 @@ class QBitTorrentAPI implements QbitTorrentApiInterface  {
   }
 
   @override
-  Future<String> getDownloadLimit() async {
+  Future<String> getTransferDownloadLimit() async {
     var resp =
         await session.get('${_apiURL}${ApiEndPoint.API_TRANSFER_DOWNLOAD_LIMIT}');
     return resp.body ; 
   }
 
   @override
-  Future<String> setDownloadLimit(int limit) async {
+  Future<String> setTransferDownloadLimit(int limit) async {
     var resp =
         await session.post('${_apiURL}${ApiEndPoint.API_TRANSFER_SET_DOWNLOAD_LIMIT}' , body : {
           'limit' : limit.toString()
@@ -187,14 +187,14 @@ class QBitTorrentAPI implements QbitTorrentApiInterface  {
 
 
   @override
-  Future<String> getUploadLimit() async {
+  Future<String> getTransferUploadLimit() async {
     var resp =
         await session.get('${_apiURL}${ApiEndPoint.API_TRANSFER_UPLOAD_LIMIT}');
     return resp.body ; 
   }
 
   @override
-  Future<String> setUploadLimit(int limit) async {
+  Future<String> setTransferUploadLimit(int limit) async {
     var resp =
         await session.post('${_apiURL}${ApiEndPoint.API_TRANSFER_SET_UPLOAD_LIMIT}' , body : {
           'limit' : limit.toString()
