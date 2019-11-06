@@ -15,13 +15,27 @@ abstract class CommonTorrentFunctionsInterface {
   Future recheckMultiple(List<String> torrentHashes);
   Future removeMultiple(List<String> torrentHashes);
   Future resumeMultiple(List<String> torrentHashes);
+
+  ///Returns the URL of the documentation for the corresponding torrent api
+  String getApiDocUrl() ; 
 }
 
 abstract class QbitTorrentApiInterface extends CommonTorrentFunctionsInterface {
+  
+  /// API Doc at : https://github.com/qbittorrent/qBittorrent/wiki/Web-API-Documentation#general-information
+  Future stopAllTorrents() ;
+  Future startAllTorrents() ;
+  Future pauseAllTorrents() ;
+  Future recheckAllTorrents() ;
+  Future removeAllTorrents() ;
+  Future resumeAllTorrents() ;
+  
+  
   Future stop(String torrentHash);
 
   /// param torrentHashes is an array of torrent hashes or ['all'] for all torrents
   Future stopMultiple(List<String> torrentHashes);
+
 
   Future<bool> isLoggedIn();
   Future<String> getVersion();

@@ -23,6 +23,7 @@ class QBitTorrentAPI implements QbitTorrentApiInterface  {
   int _serverPort;
   String _apiURL;
   Session session;
+  final String API_DOC_URL = 'https://github.com/qbittorrent/qBittorrent/wiki/Web-API-Documentation#general-information' ; 
 
     QBitTorrentAPI(this._serverIP, this._serverPort) {
     _apiURL = 'http://${_serverIP}:${_serverPort}/api/v2';
@@ -435,5 +436,40 @@ Future<bool> addTorrentPeers(List<String> torrentHashes , List<String> peers) as
   @override
   Future stopMultiple(List<String> torrentHashes) async {
     pauseMultiple(torrentHashes) ; 
+  }
+
+  @override
+  String getApiDocUrl() {
+    return API_DOC_URL ; 
+  }
+
+  @override
+  Future pauseAllTorrents() async {
+    await pauseMultiple(['all']) ;
+  }
+
+  @override
+  Future recheckAllTorrents() async {
+    await recheckMultiple(['all']) ;
+  }
+
+  @override
+  Future removeAllTorrents() async {
+    await removeMultiple(['all']) ;
+  }
+
+  @override
+  Future resumeAllTorrents() async {
+    await resumeMultiple(['all']) ;
+  }
+
+  @override
+  Future startAllTorrents() async {
+    await startMultiple(['all']) ;
+  }
+
+  @override
+  Future stopAllTorrents() async {
+    await stopMultiple(['all']) ;
   }
 }
