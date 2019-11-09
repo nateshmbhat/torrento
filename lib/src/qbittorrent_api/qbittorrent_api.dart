@@ -1,8 +1,8 @@
 import 'dart:async';
 import 'dart:convert';
-import 'package:torrent_api/src/exceptions/exceptions.dart';
+import 'package:torrent_api/src/core/exceptions/exceptions.dart';
 import 'package:torrent_api/src/qbittorrent_api/session.dart';
-import 'package:torrent_api/src/interfaces/torrent_interface.dart';
+import 'package:torrent_api/src/core/interfaces/torrent_interface.dart';
 
 import './session.dart';
 import 'package:http/http.dart' as http;

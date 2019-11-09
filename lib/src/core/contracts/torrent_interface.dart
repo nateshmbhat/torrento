@@ -1,27 +1,68 @@
-import '../../torrent_api.dart';
+import 'package:meta/meta.dart';
+import '../../../torrent_api.dart';
 
-abstract class CommonTorrentFunctionsInterface {
-  Future login(String username, String password);
+abstract class TorrentController {
+  // ! Actions
+  // * To handle single torrent
+
+  Future login({@required String username, @required String password});
   Future logout();
 
   Future start(String torrentHash);
-  Future pause(String torrentHash);
+  Future stop(String torrentHash);
   Future resume(String torrentHash);
+
+  Future pause(String torrentHash);
+  Future unpause(String torrentHash);
+
+  Future forceStart(String torrentHash);
+
   Future remove(String torrentHash);
+  Future remoteData(String torrentHash);
   Future recheck(String torrentHash);
 
+  Future addUrl(String url);
+
+  // * To handle multiple torrents
+  
   Future startMultiple(List<String> torrentHashes);
+  Future stopMultiple(List<String> torrentHashes);
+  Future resumeMultiple(List<String> torrentHashes);
+
   Future pauseMultiple(List<String> torrentHashes);
+  Future unpauseMultiple(String torrentHash);
+
+  Future forceStartMultiple(List<String> torrentHashes);
+
   Future recheckMultiple(List<String> torrentHashes);
   Future removeMultiple(List<String> torrentHashes);
-  Future resumeMultiple(List<String> torrentHashes);
+  Future remoteDataMultiple(List<String> torrentHash);
+
+  // ! get and set properties of torrents
+  Future getProperties(String torrentHash);
+
+  Future setProperties(
+    String torrentHash, {
+    @required Map<String, dynamic> propertiesAndValues,
+  });
+
+  // ! To get a list of files under a given torrent job
+  Future getListOfFilesUnderATorrentJob(String torrentHash);
+
+  // ! To get a list of torrents and their associated properties
+  Future getTorrentList();
+
+  // ! To get or set a list of settings on the torrent client
+  Future getClientSettings();
+
+  Future setClientSettings(Map<String, dynamic> settingsAndValues);
 
   ///Returns the URL of the documentation for the corresponding torrent api
   String getApiDocUrl();
 }
 
 /// API Doc at : https://github.com/qbittorrent/qBittorrent/wiki/Web-API-Documentation#general-information
-abstract class QbitTorrentApiInterface extends CommonTorrentFunctionsInterface {
+abstract class QbitTorrentApiInterface extends TorrentController {
   Future stopAllTorrents();
   Future startAllTorrents();
   Future pauseAllTorrents();
@@ -168,18 +209,17 @@ abstract class QbitTorrentApiInterface extends CommonTorrentFunctionsInterface {
   Future setfilePriority(
       String torrentHash, List<String> fileIds, int priority);
 
-  Future<dynamic> getDownloadLimit(List<String> torrentHashes) ; 
-  Future setDownloadLimit(List<String> torrentHashes , int limitInBytesPerSecond) ; 
+  Future<dynamic> getDownloadLimit(List<String> torrentHashes);
+  Future setDownloadLimit(
+      List<String> torrentHashes, int limitInBytesPerSecond);
 
-
-  Future setShareLimit(List<String> torrentHashes , double ratioLimit, int seedingTimeLimit ) ; 
+  Future setShareLimit(
+      List<String> torrentHashes, double ratioLimit, int seedingTimeLimit);
 
   Future<dynamic> getUploadLimit(List<String> torrentHashes);
-  Future setUploadLimit(List<String> torrentHashes , int limitInBytesPerSecond);
+  Future setUploadLimit(List<String> torrentHashes, int limitInBytesPerSecond);
 
-
-  Future setDownloadLocation(List<String> torrentHashes , String location);
-
+  Future setDownloadLocation(List<String> torrentHashes, String location);
 
   Future setTorrentName(String torrentHash, String name);
 
@@ -187,33 +227,31 @@ abstract class QbitTorrentApiInterface extends CommonTorrentFunctionsInterface {
 
   Future<dynamic> getAllCategories();
 
-  Future addNewCategory(String category , String savePath);
+  Future addNewCategory(String category, String savePath);
 
-  Future editCategory(String category , String newSavePath);
+  Future editCategory(String category, String newSavePath);
 
-  Future removeCategories(List<String> categories) ; 
+  Future removeCategories(List<String> categories);
 
-  Future addTorrentTags(List<String>torrentHashes,List<String> tags) ; 
+  Future addTorrentTags(List<String> torrentHashes, List<String> tags);
 
-
-  Future removeTorrentTags(List<String>torrentHashes,List<String> tags) ; 
+  Future removeTorrentTags(List<String> torrentHashes, List<String> tags);
 
   Future<dynamic> getAllTags();
 
-  Future createTags(List<String> tags); 
+  Future createTags(List<String> tags);
 
-  Future deleteTags(List<String> tags); 
+  Future deleteTags(List<String> tags);
 
-  Future setAutoTorrentManagement(List<String> torrentHashes , bool enable );
+  Future setAutoTorrentManagement(List<String> torrentHashes, bool enable);
 
-  Future toggleSequentialDownload(List<String> torrentHashes) ; 
+  Future toggleSequentialDownload(List<String> torrentHashes);
 
-  Future setFirstOrLastPiecePriority(List<String> torrentHashes) ;
+  Future setFirstOrLastPiecePriority(List<String> torrentHashes);
 
-  Future setForceStart(List<String> torrentHashes , bool value);
+  Future setForceStart(List<String> torrentHashes, bool value);
 
-  Future setSuperSeeding(List<String> torrentHashes,bool value) ; 
-
+  Future setSuperSeeding(List<String> torrentHashes, bool value);
 }
 
-abstract class UTorrentApiInterface extends CommonTorrentFunctionsInterface {}
+abstract class UTorrentApiInterface extends TorrentController {}

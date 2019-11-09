@@ -5,7 +5,7 @@ import 'package:meta/meta.dart';
 
 import 'package:html/parser.dart' as html;
 import 'package:http/http.dart' as http;
-import 'package:torrent_api/src/u_torrent_api/session.dart';
+import 'package:torrent_api/src/torrent_client_controllers/u_torrent_api/session.dart';
 
 /// A wrapper class written around the WebUI API of uTorrent client.
 ///
