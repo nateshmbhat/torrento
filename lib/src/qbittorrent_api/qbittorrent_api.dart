@@ -1,8 +1,9 @@
 import 'dart:async';
 import 'dart:convert';
+import 'package:meta/meta.dart' ; 
+import 'package:torrent_api/src/core/contracts/torrent_interface.dart';
 import 'package:torrent_api/src/core/exceptions/exceptions.dart';
 import 'package:torrent_api/src/qbittorrent_api/session.dart';
-import 'package:torrent_api/src/core/interfaces/torrent_interface.dart';
 
 import './session.dart';
 import 'package:http/http.dart' as http;
@@ -37,7 +38,7 @@ class QBitTorrentAPI implements QbitTorrentApiInterface  {
   /// ======================== AUTH methods ==========================
 
   @override
-  Future login(String username, String password) async {
+  Future login({@required String username, @required String password}) async {
     var resp = await session.post('${_apiURL}${ApiEndPoint.API_AUTH_LOGIN}',
         body: {'username': username, 'password': password});
     if(!_isStatusOk(resp)) throw InvalidCredentialsException;
@@ -471,5 +472,241 @@ Future<bool> addTorrentPeers(List<String> torrentHashes , List<String> peers) as
   @override
   Future stopAllTorrents() async {
     await stopMultiple(['all']) ;
+  }
+
+
+
+  @override
+  Future addNewCategory(String category, String savePath) {
+    // TODO: implement addNewCategory
+    return null;
+  }
+
+  @override
+  Future addTorrentTags(List<String> torrentHashes, List<String> tags) {
+    // TODO: implement addTorrentTags
+    return null;
+  }
+
+  @override
+  Future addUrl(String url) {
+    // TODO: implement addUrl
+    return null;
+  }
+
+  @override
+  Future createTags(List<String> tags) {
+    // TODO: implement createTags
+    return null;
+  }
+
+  @override
+  Future decreasePriority(List<String> torrentHashes) {
+    // TODO: implement decreasePriority
+    return null;
+  }
+
+  @override
+  Future deleteTags(List<String> tags) {
+    // TODO: implement deleteTags
+    return null;
+  }
+
+  @override
+  Future editCategory(String category, String newSavePath) {
+    // TODO: implement editCategory
+    return null;
+  }
+
+  @override
+  Future forceStart(String torrentHash) {
+    // TODO: implement forceStart
+    return null;
+  }
+
+  @override
+  Future forceStartMultiple(List<String> torrentHashes) {
+    // TODO: implement forceStartMultiple
+    return null;
+  }
+
+  @override
+  Future getAllCategories() {
+    // TODO: implement getAllCategories
+    return null;
+  }
+
+  @override
+  Future getAllTags() {
+    // TODO: implement getAllTags
+    return null;
+  }
+
+  @override
+  Future getClientSettings() {
+    // TODO: implement getClientSettings
+    return null;
+  }
+
+  @override
+  Future getDownloadLimit(List<String> torrentHashes) {
+    // TODO: implement getDownloadLimit
+    return null;
+  }
+
+  @override
+  Future getListOfFilesUnderATorrentJob(String torrentHash) {
+    // TODO: implement getListOfFilesUnderATorrentJob
+    return null;
+  }
+
+  @override
+  Future getProperties(String torrentHash) {
+    // TODO: implement getProperties
+    return null;
+  }
+
+  @override
+  Future getUploadLimit(List<String> torrentHashes) {
+    // TODO: implement getUploadLimit
+    return null;
+  }
+
+  @override
+  Future increasePriority(List<String> torrentHashes) {
+    // TODO: implement increasePriority
+    return null;
+  }
+
+  @override
+  Future remoteData(String torrentHash) {
+    // TODO: implement remoteData
+    return null;
+  }
+
+  @override
+  Future remoteDataMultiple(List<String> torrentHash) {
+    // TODO: implement remoteDataMultiple
+    return null;
+  }
+
+  @override
+  Future removeCategories(List<String> categories) {
+    // TODO: implement removeCategories
+    return null;
+  }
+
+  @override
+  Future removeTorrentTags(List<String> torrentHashes, List<String> tags) {
+    // TODO: implement removeTorrentTags
+    return null;
+  }
+
+  @override
+  Future setAutoTorrentManagement(List<String> torrentHashes, bool enable) {
+    // TODO: implement setAutoTorrentManagement
+    return null;
+  }
+
+  @override
+  Future setCategory(List<String> torrentHashes, String category) {
+    // TODO: implement setCategory
+    return null;
+  }
+
+  @override
+  Future setClientSettings(Map<String, > settingsAndValues) {
+    // TODO: implement setClientSettings
+    return null;
+  }
+
+  @override
+  Future setDownloadLimit(List<String> torrentHashes, int limitInBytesPerSecond) {
+    // TODO: implement setDownloadLimit
+    return null;
+  }
+
+  @override
+  Future setDownloadLocation(List<String> torrentHashes, String location) {
+    // TODO: implement setDownloadLocation
+    return null;
+  }
+
+  @override
+  Future setFirstOrLastPiecePriority(List<String> torrentHashes) {
+    // TODO: implement setFirstOrLastPiecePriority
+    return null;
+  }
+
+  @override
+  Future setForceStart(List<String> torrentHashes, bool value) {
+    // TODO: implement setForceStart
+    return null;
+  }
+
+  @override
+  Future setMaxPriority(List<String> torrentHashes) {
+    // TODO: implement setMaxPriority
+    return null;
+  }
+
+  @override
+  Future setMinPriority(List<String> torrentHashes) {
+    // TODO: implement setMinPriority
+    return null;
+  }
+
+  @override
+  Future setProperties(String torrentHash, {Map<String, > propertiesAndValues}) {
+    // TODO: implement setProperties
+    return null;
+  }
+
+  @override
+  Future setShareLimit(List<String> torrentHashes, double ratioLimit, int seedingTimeLimit) {
+    // TODO: implement setShareLimit
+    return null;
+  }
+
+  @override
+  Future setSuperSeeding(List<String> torrentHashes, bool value) {
+    // TODO: implement setSuperSeeding
+    return null;
+  }
+
+  @override
+  Future setTorrentName(String torrentHash, String name) {
+    // TODO: implement setTorrentName
+    return null;
+  }
+
+  @override
+  Future setUploadLimit(List<String> torrentHashes, int limitInBytesPerSecond) {
+    // TODO: implement setUploadLimit
+    return null;
+  }
+
+  @override
+  Future setfilePriority(String torrentHash, List<String> fileIds, int priority) {
+    // TODO: implement setfilePriority
+    return null;
+  }
+
+  @override
+  Future toggleSequentialDownload(List<String> torrentHashes) {
+    // TODO: implement toggleSequentialDownload
+    return null;
+  }
+
+  @override
+  Future unpause(String torrentHash) {
+    // TODO: implement unpause
+    return null;
+  }
+
+  @override
+  Future unpauseMultiple(String torrentHash) {
+    // TODO: implement unpauseMultiple
+    return null;
   }
 }

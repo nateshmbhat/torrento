@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'dart:developer';
 
 import 'package:http/http.dart' as http ;
-import 'package:torrent_api/src/interfaces/session.dart'; 
+import 'package:torrent_api/src/core/contracts/session.dart';
 
 
 ///Singleton Session class to handle cookies
