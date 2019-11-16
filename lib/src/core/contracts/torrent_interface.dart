@@ -1,4 +1,5 @@
 import 'package:meta/meta.dart';
+import 'package:torrent_api/src/torrent_client_controllers/qbittorrent/qbittorrent_controller.dart';
 import '../../../torrent_api.dart';
 
 abstract class TorrentController {
@@ -62,7 +63,13 @@ abstract class TorrentController {
 }
 
 /// API Doc at : https://github.com/qbittorrent/qBittorrent/wiki/Web-API-Documentation#general-information
-abstract class QbitTorrentApiInterface extends TorrentController {
+abstract class QbitTorrentController extends TorrentController {
+
+  factory QbitTorrentController(String serverIp, int serverPort){
+    return new QbitTorrentControllerImpl(serverIp , serverPort) ; 
+  }
+
+
   Future stopAllTorrents();
   Future startAllTorrents();
   Future pauseAllTorrents();

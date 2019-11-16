@@ -17,7 +17,7 @@ enum TorrentFilter{
 
 
 
-class QBitTorrentAPI implements QbitTorrentApiInterface  {
+class QbitTorrentControllerImpl implements QbitTorrentController  {
   /// API Doc at : https://github.com/qbittorrent/qBittorrent/wiki/Web-API-Documentation#general-information
   String _serverIP;
   int _serverPort;
@@ -25,7 +25,8 @@ class QBitTorrentAPI implements QbitTorrentApiInterface  {
   Session session;
   final String API_DOC_URL = 'https://github.com/qbittorrent/qBittorrent/wiki/Web-API-Documentation#general-information' ; 
 
-    QBitTorrentAPI(this._serverIP, this._serverPort) {
+
+    QbitTorrentControllerImpl(this._serverIP, this._serverPort) {
     _apiURL = 'http://${_serverIP}:${_serverPort}/api/v2';
     session = Session();
   }

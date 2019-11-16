@@ -4,7 +4,7 @@ import 'package:torrent_api/torrent_api.dart';
 
 
 main(List<String> args ) async{
-  QBitTorrentAPI obj = new QBitTorrentAPI('192.168.0.100' , 8080) ; 
+  QbitTorrentController obj = new QbitTorrentController('192.168.0.100' , 8080) ; 
   await obj.login('natesh' , 'password') ; 
 
   await obj.startAllTorrents() ; 

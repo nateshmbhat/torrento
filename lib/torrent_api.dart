@@ -1,1 +1,1 @@
-export 'src/torrent_client_controllers/qbittorrent/qbittorrent_controller.dart';
+export 'src/core/contracts/torrent_interface.dart';
