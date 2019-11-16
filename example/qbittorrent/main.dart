@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:torrent_api/torrent_api.dart';
+import 'package:torrential_lib/torrential_lib.dart';
 
 
 main(List<String> args ) async{

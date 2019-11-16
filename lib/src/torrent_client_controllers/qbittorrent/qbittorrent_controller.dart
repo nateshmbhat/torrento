@@ -1,8 +1,8 @@
 import 'dart:async';
 import 'dart:convert';
-import 'package:meta/meta.dart' ; 
-import 'package:torrent_api/src/core/contracts/torrent_interface.dart';
-import 'package:torrent_api/src/core/exceptions/exceptions.dart';
+import 'package:meta/meta.dart' ;
+import 'package:torrential_lib/src/core/exceptions/exceptions.dart';
+import 'package:torrential_lib/src/core/contracts/torrent_interface.dart'; 
 
 import './session.dart';
 import 'package:http/http.dart' as http;

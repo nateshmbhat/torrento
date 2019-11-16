@@ -1,6 +1,5 @@
 import 'package:meta/meta.dart';
-import 'package:torrent_api/src/torrent_client_controllers/qbittorrent/qbittorrent_controller.dart';
-import '../../../torrent_api.dart';
+import 'package:torrential_lib/src/torrent_client_controllers/qbittorrent/qbittorrent_controller.dart';
 
 abstract class TorrentController {
   // ! Actions
