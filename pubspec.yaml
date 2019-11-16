@@ -1,4 +1,4 @@
-name: torrent_api
+name: torrential_lib
 description: An API wrapper for multiple torrent clients
 
 dependencies:
