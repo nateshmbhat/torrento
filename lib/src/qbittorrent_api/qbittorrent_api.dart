@@ -38,7 +38,7 @@ class QBitTorrentAPI implements QbitTorrentApiInterface  {
   /// ======================== AUTH methods ==========================
 
   @override
-  Future login({@required String username, @required String password}) async {
+  Future login(String username,String password) async {
     var resp = await session.post('${_apiURL}${ApiEndPoint.API_AUTH_LOGIN}',
         body: {'username': username, 'password': password});
     if(!_isStatusOk(resp)) throw InvalidCredentialsException;
@@ -615,7 +615,7 @@ Future<bool> addTorrentPeers(List<String> torrentHashes , List<String> peers) as
   }
 
   @override
-  Future setClientSettings(Map<String, > settingsAndValues) {
+  Future setClientSettings(Map<String, dynamic > settingsAndValues) {
     // TODO: implement setClientSettings
     return null;
   }
@@ -657,7 +657,7 @@ Future<bool> addTorrentPeers(List<String> torrentHashes , List<String> peers) as
   }
 
   @override
-  Future setProperties(String torrentHash, {Map<String, > propertiesAndValues}) {
+  Future setProperties(String torrentHash, {Map<String, dynamic > propertiesAndValues}) {
     // TODO: implement setProperties
     return null;
   }

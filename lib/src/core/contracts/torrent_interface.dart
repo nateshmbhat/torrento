@@ -5,7 +5,7 @@ abstract class TorrentController {
   // ! Actions
   // * To handle single torrent
 
-  Future login({@required String username, @required String password});
+  Future login(String username, String password);
   Future logout();
 
   Future start(String torrentHash);
