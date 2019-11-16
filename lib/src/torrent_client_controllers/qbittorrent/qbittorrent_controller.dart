@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'package:meta/meta.dart' ; 
 import 'package:torrent_api/src/core/contracts/torrent_interface.dart';
 import 'package:torrent_api/src/core/exceptions/exceptions.dart';
-import 'package:torrent_api/src/qbittorrent_api/session.dart';
 
 import './session.dart';
 import 'package:http/http.dart' as http;
