@@ -1,5 +1,5 @@
 import 'package:meta/meta.dart';
-import 'package:torrent_api/src/torrent_client_controllers/qbittorrent/qbittorrent_controller.dart';
+import 'package:torrential_lib/src/torrent_client_controllers/qbittorrent/qbittorrent_controller.dart';
 
 abstract class TorrentController {
   // ! Actions
@@ -132,7 +132,7 @@ abstract class QbitTorrentController extends TorrentController {
   Future<String> banPeers(List<String> peers);
 
   /// Get a list of torrents based on the filters and applied parameters. See api docs for more info on response object
-  Future<dynamic> getTorrentList(
+  Future<dynamic> getTorrentsList(
       {TorrentFilter filter,
       String category,
       String sort,
@@ -160,12 +160,38 @@ abstract class QbitTorrentController extends TorrentController {
   /// param torrentHashes is an array of torrent hashes or ['all'] to reannounce all torrents
   Future<String> reannounceTorrents(List<String> torrentHashs);
 
+  /// Add new torrent
+  //Params :
+  /// urls : list of URLs
+  ///torrents : Raw data of torrent file. torrents can be presented multiple times.
+  Future addTorrent(String url , 
+      {
+ String torrentFileContent,
+        String savepath,
+      String cookie,
+      String category,
+      bool skip_checking = false,
+      bool paused = false,
+      bool root_folder = false,
+      String rename,
+      int uploadLimit,
+      int downloadLimit,
+      bool useAutoTMM,
+      bool sequentialDownload = false,
+      bool prioritizeFirstLastPiece = false});
+
+
+
+
+
   /// Add new torrents
   ///Params :
   /// urls : list of URLs
   ///torrents : Raw data of torrent file. torrents can be presented multiple times.
-  Future addNewTorrents(List<String> urls, String torrents,
-      {String savepath,
+  Future addTorrents(List<String> urls ,
+      {
+      String torrentFileContent,
+        String savepath,
       String cookie,
       String category,
       bool skip_checking = false,

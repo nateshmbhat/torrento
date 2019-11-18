@@ -38,7 +38,8 @@ class QbitTorrentControllerImpl implements QbitTorrentController  {
   /// ======================== AUTH methods ==========================
 
   @override
-  Future login(String username,String password) async {
+  Future logIn({@required String username, @required String password}) async {
+
     var resp = await session.post('${_apiURL}${ApiEndPoint.API_AUTH_LOGIN}',
         body: {'username': username, 'password': password});
     if(!_isStatusOk(resp)) throw InvalidCredentialsException(resp);
@@ -47,7 +48,7 @@ class QbitTorrentControllerImpl implements QbitTorrentController  {
   }
 
   @override
-  Future logout() async {
+  Future logOut() async {
     var resp = await session.post('${_apiURL}${ApiEndPoint.API_AUTH_LOGOUT}');
     if(!_isStatusOk(resp)) throw InvalidRequestException(resp);
   }
@@ -222,7 +223,7 @@ class QbitTorrentControllerImpl implements QbitTorrentController  {
   /// =======================  Torrent api methods ======================
 
   @override
-  Future<dynamic> getTorrentList({TorrentFilter filter , String category , String sort , bool reverse , int limit , int offset , List<String> hashes}) async {
+  Future<dynamic> getTorrentsList({TorrentFilter filter , String category , String sort , bool reverse , int limit , int offset , List<String> hashes}) async {
     final Map<String,dynamic> body = {} ;
     if(filter!=null) body['filter'] = filter.toString().split('.').last; 
     if(category!=null) body['category'] = category ; 
@@ -282,13 +283,13 @@ Future<dynamic> getTorrentPieceHashes(String torrentHash) async {
 
 
 @override
-Future pauseMultiple(List<String> torrentHashs) async {
+Future pauseMultipleTorrents(List<String> torrentHashs) async {
     var resp = await session.post('${_apiURL}${ApiEndPoint.API_TORRENT_PAUSE}' , body :{'hashes' : torrentHashs.join('|')});
     if(!_isStatusOk(resp)) throw InvalidParameterException(resp) ; 
   }
 
 @override
-Future pause(String torrentHash) async {
+Future pauseTorrent(String torrentHash) async {
     var resp = await session.post('${_apiURL}${ApiEndPoint.API_TORRENT_PAUSE}' , body :{'hashes' : torrentHash});
     if(!_isStatusOk(resp)) throw InvalidParameterException(resp) ; 
   }
@@ -296,20 +297,20 @@ Future pause(String torrentHash) async {
 
 
 @override
-Future resume(String torrentHash) async {
+Future resumeTorrent(String torrentHash) async {
     var resp = await session.post('${_apiURL}${ApiEndPoint.API_TORRENT_RESUME}' , body :{'hashes' : torrentHash});
     if(resp.statusCode!=200) throw InvalidParameterException(resp) ; 
   }
 
 
 @override
-Future resumeMultiple(List<String> torrentHashs) async {
+Future resumeMultipleTorrents(List<String> torrentHashs) async {
     var resp = await session.post('${_apiURL}${ApiEndPoint.API_TORRENT_RESUME}' , body :{'hashes' : torrentHashs.join('|')});
     if(resp.statusCode!=200) throw InvalidParameterException(resp) ; 
   }
 
 @override
-Future remove(String torrentHash) async {
+Future removeTorrent(String torrentHash) async {
     var resp = await session.post('${_apiURL}${ApiEndPoint.API_TORRENT_DELETE}' , body :{
       'hashes' : torrentHash , 
     });
@@ -319,7 +320,7 @@ Future remove(String torrentHash) async {
 
 
 @override
-Future removeMultiple(List<String> torrentHashs) async {
+Future removeMultipleTorrents(List<String> torrentHashs) async {
     var resp = await session.post('${_apiURL}${ApiEndPoint.API_TORRENT_DELETE}' , body :{
       'hashes' : torrentHashs.join('|') , 
     });
@@ -336,13 +337,13 @@ Future removeMultipleTorrentsWithData(List<String> torrentHashs) async {
   }
 
 @override
-Future recheckMultiple(List<String> torrentHashs) async {
+Future recheckMultipleTorrents(List<String> torrentHashs) async {
     var resp = await session.post('${_apiURL}${ApiEndPoint.API_TORRENT_RECHECK}' , body :{'hashes' : torrentHashs.join('|')});
     if(resp.statusCode!=200) throw InvalidParameterException(resp) ; 
 }
 
 @override
-Future recheck(String torrentHash) async {
+Future recheckTorrent(String torrentHash) async {
     var resp = await session.post('${_apiURL}${ApiEndPoint.API_TORRENT_RECHECK}' , body :{'hashes' : torrentHash});
     if(resp.statusCode!=200) throw InvalidParameterException(resp) ; 
   }
@@ -356,12 +357,14 @@ Future<String> reannounceTorrents(List<String> torrentHashs) async {
 
 
 
+///TODO : ADD TORRENT HAS TO BE REDESIGNED PROPERLY
  @override
-Future addNewTorrents(List<String> urls , String torrents , {
+Future addTorrents(List<String> urls , {
+String torrentFileContent  , 
   String savepath , String cookie, String category , bool skip_checking =false , bool paused = false , bool root_folder = false , String rename , int uploadLimit , int downloadLimit , bool useAutoTMM , bool sequentialDownload = false , bool prioritizeFirstLastPiece = false
 }) async {
     final Map<String,dynamic> body = {
-      'urls' : urls.join('%0A'), 'torrents' : torrents ,
+      'urls' : urls.join('%0A'), 'torrents' : torrentFileContent,
       'skip_checking':skip_checking , 'paused':paused , 'root_folder':root_folder , 'sequentialDownload':sequentialDownload , 'prioritizeFirstLastPiece':prioritizeFirstLastPiece} ; 
 
     if(savepath!=null)body['savepath'] =savepath ; 
@@ -422,23 +425,23 @@ Future<bool> addTorrentPeers(List<String> torrentHashes , List<String> peers) as
 }
 
   @override
-  Future start(String torrentHash) async {
-    resume(torrentHash) ; 
+  Future startTorrent(String torrentHash) async {
+    resumeTorrent(torrentHash) ; 
   }
 
   @override
-  Future startMultiple(List<String> torrentHashes) async {
-    resumeMultiple(torrentHashes);
+  Future startMultipleTorrents(List<String> torrentHashes) async {
+    resumeMultipleTorrents(torrentHashes);
   }
 
   @override
-  Future stop(String torrentHash) async {
-    pause(torrentHash);
+  Future stopTorrent(String torrentHash) async {
+    pauseTorrent(torrentHash);
   }
 
   @override
-  Future stopMultiple(List<String> torrentHashes) async {
-    pauseMultiple(torrentHashes) ; 
+  Future stopMultipleTorrents(List<String> torrentHashes) async {
+    pauseMultipleTorrents(torrentHashes) ; 
   }
 
   @override
@@ -448,32 +451,32 @@ Future<bool> addTorrentPeers(List<String> torrentHashes , List<String> peers) as
 
   @override
   Future pauseAllTorrents() async {
-    await pauseMultiple(['all']) ;
+    await pauseMultipleTorrents(['all']) ;
   }
 
   @override
   Future recheckAllTorrents() async {
-    await recheckMultiple(['all']) ;
+    await recheckMultipleTorrents(['all']) ;
   }
 
   @override
   Future removeAllTorrents() async {
-    await removeMultiple(['all']) ;
+    await removeMultipleTorrents(['all']) ;
   }
 
   @override
   Future resumeAllTorrents() async {
-    await resumeMultiple(['all']) ;
+    await resumeMultipleTorrents(['all']) ;
   }
 
   @override
   Future startAllTorrents() async {
-    await startMultiple(['all']) ;
+    await startMultipleTorrents(['all']) ;
   }
 
   @override
   Future stopAllTorrents() async {
-    await stopMultiple(['all']) ;
+    await stopMultipleTorrents(['all']) ;
   }
 
 
@@ -487,12 +490,6 @@ Future<bool> addTorrentPeers(List<String> torrentHashes , List<String> peers) as
   @override
   Future addTorrentTags(List<String> torrentHashes, List<String> tags) {
     // TODO: implement addTorrentTags
-    return null;
-  }
-
-  @override
-  Future addUrl(String url) {
-    // TODO: implement addUrl
     return null;
   }
 
@@ -521,13 +518,13 @@ Future<bool> addTorrentPeers(List<String> torrentHashes , List<String> peers) as
   }
 
   @override
-  Future forceStart(String torrentHash) {
+  Future forceStartTorrent(String torrentHash) {
     // TODO: implement forceStart
     return null;
   }
 
   @override
-  Future forceStartMultiple(List<String> torrentHashes) {
+  Future forceStartMultipleTorrents(List<String> torrentHashes) {
     // TODO: implement forceStartMultiple
     return null;
   }
@@ -563,7 +560,7 @@ Future<bool> addTorrentPeers(List<String> torrentHashes , List<String> peers) as
   }
 
   @override
-  Future getProperties(String torrentHash) {
+  Future getPropertiesOfTorrent(String torrentHash) {
     // TODO: implement getProperties
     return null;
   }
@@ -581,13 +578,13 @@ Future<bool> addTorrentPeers(List<String> torrentHashes , List<String> peers) as
   }
 
   @override
-  Future remoteData(String torrentHash) {
+  Future removeTorrentAndData(String torrentHash) {
     // TODO: implement remoteData
     return null;
   }
 
   @override
-  Future remoteDataMultiple(List<String> torrentHash) {
+  Future removeMultipleTorrentsAndData(List<String> torrentHash) {
     // TODO: implement remoteDataMultiple
     return null;
   }
@@ -659,7 +656,7 @@ Future<bool> addTorrentPeers(List<String> torrentHashes , List<String> peers) as
   }
 
   @override
-  Future setProperties(String torrentHash, {Map<String, dynamic > propertiesAndValues}) {
+  Future setPropertiesOfTorrent(String torrentHash, {Map<String, dynamic > propertiesAndValues}) {
     // TODO: implement setProperties
     return null;
   }
@@ -701,14 +698,19 @@ Future<bool> addTorrentPeers(List<String> torrentHashes , List<String> peers) as
   }
 
   @override
-  Future unpause(String torrentHash) {
+  Future unpauseTorrent(String torrentHash) {
     // TODO: implement unpause
     return null;
   }
 
   @override
-  Future unpauseMultiple(String torrentHash) {
+  Future unpauseMultipleTorrents(List<String> torrentHashes) {
     // TODO: implement unpauseMultiple
     return null;
+  }
+
+  @override
+  Future addTorrent(String url, {String torrentFileContent, String savepath, String cookie, String category, bool skip_checking = false, bool paused = false, bool root_folder = false, String rename, int uploadLimit, int downloadLimit, bool useAutoTMM, bool sequentialDownload = false, bool prioritizeFirstLastPiece = false}) {
+    addTorrents([url] , torrentFileContent: torrentFileContent , savepath:  savepath , cookie: cookie , category: category , skip_checking: skip_checking, paused: paused , root_folder:  root_folder , rename: rename , uploadLimit: uploadLimit , downloadLimit:  downloadLimit , useAutoTMM:  useAutoTMM , sequentialDownload:  sequentialDownload , prioritizeFirstLastPiece: prioritizeFirstLastPiece ); 
   }
 }
