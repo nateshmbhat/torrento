@@ -1,47 +1,47 @@
 import 'package:meta/meta.dart';
-import 'package:torrential_lib/src/torrent_client_controllers/qbittorrent/qbittorrent_controller.dart';
+import 'package:torrent_api/src/torrent_client_controllers/qbittorrent/qbittorrent_controller.dart';
 
 abstract class TorrentController {
   // ! Actions
   // * To handle single torrent
 
-  Future login(String username, String password);
-  Future logout();
+  Future logIn({String username, String password});
+  void logOut();
 
-  Future start(String torrentHash);
-  Future stop(String torrentHash);
-  Future resume(String torrentHash);
+  Future startTorrent(String torrentHash);
+  Future stopTorrent(String torrentHash);
+  Future resumeTorrent(String torrentHash);
 
-  Future pause(String torrentHash);
-  Future unpause(String torrentHash);
+  Future pauseTorrent(String torrentHash);
+  Future unpauseTorrent(String torrentHash);
 
-  Future forceStart(String torrentHash);
+  Future forceStartTorrent(String torrentHash);
 
-  Future remove(String torrentHash);
-  Future remoteData(String torrentHash);
-  Future recheck(String torrentHash);
+  Future removeTorrent(String torrentHash);
+  Future removeTorrentAndData(String torrentHash);
+  Future recheckTorrent(String torrentHash);
 
-  Future addUrl(String url);
+  Future addTorrent(String torrentUrl);
 
   // * To handle multiple torrents
-  
-  Future startMultiple(List<String> torrentHashes);
-  Future stopMultiple(List<String> torrentHashes);
-  Future resumeMultiple(List<String> torrentHashes);
 
-  Future pauseMultiple(List<String> torrentHashes);
-  Future unpauseMultiple(String torrentHash);
+  Future startMultipleTorrents(List<String> torrentHashes);
+  Future stopMultipleTorrents(List<String> torrentHashes);
+  Future resumeMultipleTorrents(List<String> torrentHashes);
 
-  Future forceStartMultiple(List<String> torrentHashes);
+  Future pauseMultipleTorrents(List<String> torrentHashes);
+  Future unpauseMultipleTorrents(List<String> torrentHash);
 
-  Future recheckMultiple(List<String> torrentHashes);
-  Future removeMultiple(List<String> torrentHashes);
-  Future remoteDataMultiple(List<String> torrentHash);
+  Future forceStartMultipleTorrents(List<String> torrentHashes);
+
+  Future recheckMultipleTorrents(List<String> torrentHashes);
+  Future removeMultipleTorrents(List<String> torrentHashes);
+  Future removeMultipleTorrentsAndData(List<String> torrentHash);
 
   // ! get and set properties of torrents
-  Future getProperties(String torrentHash);
+  Future getPropertiesOfTorrent(String torrentHash);
 
-  Future setProperties(
+  Future setPropertiesOfTorrent(
     String torrentHash, {
     @required Map<String, dynamic> propertiesAndValues,
   });
@@ -50,7 +50,7 @@ abstract class TorrentController {
   Future getListOfFilesUnderATorrentJob(String torrentHash);
 
   // ! To get a list of torrents and their associated properties
-  Future getTorrentList();
+  Future getTorrentsList();
 
   // ! To get or set a list of settings on the torrent client
   Future getClientSettings();
@@ -63,11 +63,9 @@ abstract class TorrentController {
 
 /// API Doc at : https://github.com/qbittorrent/qBittorrent/wiki/Web-API-Documentation#general-information
 abstract class QbitTorrentController extends TorrentController {
-
-  factory QbitTorrentController(String serverIp, int serverPort){
-    return new QbitTorrentControllerImpl(serverIp , serverPort) ; 
+  factory QbitTorrentController(String serverIp, int serverPort) {
+    return new QbitTorrentControllerImpl(serverIp, serverPort);
   }
-
 
   Future stopAllTorrents();
   Future startAllTorrents();
@@ -76,10 +74,10 @@ abstract class QbitTorrentController extends TorrentController {
   Future removeAllTorrents();
   Future resumeAllTorrents();
 
-  Future stop(String torrentHash);
+  Future stopTorrent(String torrentHash);
 
   /// param torrentHashes is an array of torrent hashes or ['all'] for all torrents
-  Future stopMultiple(List<String> torrentHashes);
+  Future stopMultipleTorrents(List<String> torrentHashes);
 
   Future<bool> isLoggedIn();
   Future<String> getVersion();
@@ -154,7 +152,7 @@ abstract class QbitTorrentController extends TorrentController {
   Future<dynamic> getTorrentPieceHashes(String torrentHash);
 
   /// param torrentHashes is an array of torrent hashes or ['all'] for all torrents
-  Future pauseMultiple(List<String> torrentHashs);
+  Future pauseMultipleTorrents(List<String> torrentHashs);
 
   /// param torrentHashes is an array of torrent hashes or ['all'] for all torrents
   Future removeMultipleTorrentsWithData(List<String> torrentHashs);
