@@ -41,13 +41,15 @@ class QbitTorrentControllerImpl implements QbitTorrentController  {
   Future login(String username,String password) async {
     var resp = await session.post('${_apiURL}${ApiEndPoint.API_AUTH_LOGIN}',
         body: {'username': username, 'password': password});
-    if(!_isStatusOk(resp)) throw InvalidCredentialsException;
+    if(!_isStatusOk(resp)) throw InvalidCredentialsException(resp);
+    if(resp.body.trim()=="Fails.") throw InvalidCredentialsException(resp) ;
+
   }
 
   @override
   Future logout() async {
     var resp = await session.post('${_apiURL}${ApiEndPoint.API_AUTH_LOGOUT}');
-    if(!_isStatusOk(resp)) throw InvalidRequestException;
+    if(!_isStatusOk(resp)) throw InvalidRequestException(resp);
   }
 
   
@@ -88,7 +90,7 @@ class QbitTorrentControllerImpl implements QbitTorrentController  {
   @override
   Future shutdownApplication() async {
     var resp = await session.get('${_apiURL}${ApiEndPoint.API_APP_SHUTDOWN}');
-    if(!_isStatusOk(resp)) throw InvalidRequestException;
+    if(!_isStatusOk(resp)) throw InvalidRequestException(resp);
   }
 
   @override
@@ -101,7 +103,7 @@ class QbitTorrentControllerImpl implements QbitTorrentController  {
   Future setPreferences(Map<String, dynamic> jsondata) async {
     var resp = await session.post('${_apiURL}${ApiEndPoint.API_APP_SET_PREFERENCES}',
         body: {'json': json.encode(jsondata)});
-    if(!_isStatusOk(resp)) throw InvalidParameterException ; 
+    if(!_isStatusOk(resp)) throw InvalidParameterException(resp) ; 
   }
 
   /// ===========================  Log api methods  ======================
@@ -282,13 +284,13 @@ Future<dynamic> getTorrentPieceHashes(String torrentHash) async {
 @override
 Future pauseMultiple(List<String> torrentHashs) async {
     var resp = await session.post('${_apiURL}${ApiEndPoint.API_TORRENT_PAUSE}' , body :{'hashes' : torrentHashs.join('|')});
-    if(!_isStatusOk(resp)) throw InvalidParameterException ; 
+    if(!_isStatusOk(resp)) throw InvalidParameterException(resp) ; 
   }
 
 @override
 Future pause(String torrentHash) async {
     var resp = await session.post('${_apiURL}${ApiEndPoint.API_TORRENT_PAUSE}' , body :{'hashes' : torrentHash});
-    if(!_isStatusOk(resp)) throw InvalidParameterException ; 
+    if(!_isStatusOk(resp)) throw InvalidParameterException(resp) ; 
   }
 
 
@@ -296,14 +298,14 @@ Future pause(String torrentHash) async {
 @override
 Future resume(String torrentHash) async {
     var resp = await session.post('${_apiURL}${ApiEndPoint.API_TORRENT_RESUME}' , body :{'hashes' : torrentHash});
-    if(resp.statusCode!=200) throw InvalidParameterException ; 
+    if(resp.statusCode!=200) throw InvalidParameterException(resp) ; 
   }
 
 
 @override
 Future resumeMultiple(List<String> torrentHashs) async {
     var resp = await session.post('${_apiURL}${ApiEndPoint.API_TORRENT_RESUME}' , body :{'hashes' : torrentHashs.join('|')});
-    if(resp.statusCode!=200) throw InvalidParameterException ; 
+    if(resp.statusCode!=200) throw InvalidParameterException(resp) ; 
   }
 
 @override
@@ -311,7 +313,7 @@ Future remove(String torrentHash) async {
     var resp = await session.post('${_apiURL}${ApiEndPoint.API_TORRENT_DELETE}' , body :{
       'hashes' : torrentHash , 
     });
-    if(resp.statusCode!=200) throw InvalidParameterException ; 
+    if(resp.statusCode!=200) throw InvalidParameterException(resp) ; 
   }
 
 
@@ -321,7 +323,7 @@ Future removeMultiple(List<String> torrentHashs) async {
     var resp = await session.post('${_apiURL}${ApiEndPoint.API_TORRENT_DELETE}' , body :{
       'hashes' : torrentHashs.join('|') , 
     });
-    if(resp.statusCode!=200) throw InvalidParameterException ; 
+    if(resp.statusCode!=200) throw InvalidParameterException(resp) ; 
   }
 
 @override
@@ -330,19 +332,19 @@ Future removeMultipleTorrentsWithData(List<String> torrentHashs) async {
       'hashes' : torrentHashs.join('|') , 
     'deleteFiles' : 'true'
     });
-    if(resp.statusCode!=200) throw InvalidParameterException ; 
+    if(resp.statusCode!=200) throw InvalidParameterException(resp) ; 
   }
 
 @override
 Future recheckMultiple(List<String> torrentHashs) async {
     var resp = await session.post('${_apiURL}${ApiEndPoint.API_TORRENT_RECHECK}' , body :{'hashes' : torrentHashs.join('|')});
-    if(resp.statusCode!=200) throw InvalidParameterException ; 
+    if(resp.statusCode!=200) throw InvalidParameterException(resp) ; 
 }
 
 @override
 Future recheck(String torrentHash) async {
     var resp = await session.post('${_apiURL}${ApiEndPoint.API_TORRENT_RECHECK}' , body :{'hashes' : torrentHash});
-    if(resp.statusCode!=200) throw InvalidParameterException ; 
+    if(resp.statusCode!=200) throw InvalidParameterException(resp) ; 
   }
 
 
@@ -371,7 +373,7 @@ Future addNewTorrents(List<String> urls , String torrents , {
     if(useAutoTMM!=null)body['useAutoTMM'] =useAutoTMM.toString(); 
 
     var resp = await session.post('${_apiURL}${ApiEndPoint.API_TORRENT_ADD}' , body :body) ; 
-    if(!_isStatusOk(resp)) throw InvalidParameterException ; 
+    if(!_isStatusOk(resp)) throw InvalidParameterException(resp) ; 
   }
 
 
