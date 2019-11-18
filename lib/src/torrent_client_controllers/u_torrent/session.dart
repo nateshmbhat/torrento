@@ -76,7 +76,6 @@ class Session {
 
     request.headers.addAll(sessionHeaders);
     request.headers['content-type'] = 'multipart/form-dart';
-    print(request.headers);
 
     request.files.add(multipartFile);
 

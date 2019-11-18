@@ -5,17 +5,16 @@ import 'package:torrential_lib/torrential_lib.dart';
 
 main(List<String> args ) async{
   QbitTorrentController obj = new QbitTorrentController('192.168.0.100' , 8080) ; 
-  await obj.login('natesh' , 'password') ; 
+  await obj.logIn('natesh' , 'password') ; 
 
-  await obj.startAllTorrents() ; 
-  print("Started all torrents.\nSleeping for 5 seconds before stopping them all ..zzzZZzzzZZ ") ; 
+  var torrents = await obj.getTorrentsList() ; 
 
-  sleep(Duration(seconds: 5)) ; 
-
+  torrents.forEach((t)=>print(t['name'])) ; 
+  
+  print("Stopping all torrents") ;
   await obj.stopAllTorrents() ; 
-  print("Stopped all torrents") ;
 
   print(await obj.getVersion()) ; 
 
-  await obj.logout() ; 
+  await obj.logOut() ; 
 }

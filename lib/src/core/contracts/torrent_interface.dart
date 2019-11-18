@@ -5,8 +5,8 @@ abstract class TorrentController {
   // ! Actions
   // * To handle single torrent
 
-  Future logIn({String username, String password});
-  void logOut();
+  Future logIn(String username, String password);
+  Future logOut();
 
   Future startTorrent(String torrentHash);
   Future stopTorrent(String torrentHash);
@@ -132,7 +132,7 @@ abstract class QbitTorrentController extends TorrentController {
   Future<String> banPeers(List<String> peers);
 
   /// Get a list of torrents based on the filters and applied parameters. See api docs for more info on response object
-  Future<dynamic> getTorrentsList(
+  Future<List> getTorrentsList(
       {TorrentFilter filter,
       String category,
       String sort,

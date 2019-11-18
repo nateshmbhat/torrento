@@ -38,7 +38,7 @@ class QbitTorrentControllerImpl implements QbitTorrentController  {
   /// ======================== AUTH methods ==========================
 
   @override
-  Future logIn({@required String username, @required String password}) async {
+  Future logIn(String username, String password) async {
 
     var resp = await session.post('${_apiURL}${ApiEndPoint.API_AUTH_LOGIN}',
         body: {'username': username, 'password': password});
@@ -73,7 +73,7 @@ class QbitTorrentControllerImpl implements QbitTorrentController  {
   @override
   Future<dynamic> getBuildInfo() async {
     var resp = await session.get('${_apiURL}${ApiEndPoint.API_APP_BUILDINFO}');
-    print(resp.body);
+    return resp.body ; 
   }
 
   @override
@@ -223,7 +223,7 @@ class QbitTorrentControllerImpl implements QbitTorrentController  {
   /// =======================  Torrent api methods ======================
 
   @override
-  Future<dynamic> getTorrentsList({TorrentFilter filter , String category , String sort , bool reverse , int limit , int offset , List<String> hashes}) async {
+  Future<List> getTorrentsList({TorrentFilter filter , String category , String sort , bool reverse , int limit , int offset , List<String> hashes}) async {
     final Map<String,dynamic> body = {} ;
     if(filter!=null) body['filter'] = filter.toString().split('.').last; 
     if(category!=null) body['category'] = category ; 
@@ -231,7 +231,6 @@ class QbitTorrentControllerImpl implements QbitTorrentController  {
     if(reverse!=null) body['reverse'] = reverse.toString() ; 
     if(offset!=null) body['offset'] = offset.toString(); 
     if(hashes!=null) body['hashes'] = hashes.join('|') ;
-    print('body  = ${body}');
 
     var resp = await session.post('${_apiURL}${ApiEndPoint.API_TORRENT_INFO}' , body :body );
     return json.decode(resp.body) ;

@@ -32,7 +32,7 @@ class _UTorrentControllerImpl implements UTorrentController {
     assert(serverPort != null);
   }
 
-  Future<void> logIn({String username, String password}) async {
+  Future<void> logIn(String username, String password) async {
     String authCredentialsBase64Encoded =
         getBase64EncodingOf(username: username, password: password);
 
@@ -66,7 +66,7 @@ class _UTorrentControllerImpl implements UTorrentController {
     _session.token = token;
   }
 
-  void logOut() {
+  Future logOut() async {
     _session.clearSession();
   }
 
