@@ -324,7 +324,8 @@ class QbitTorrentControllerImpl implements QbitTorrentController {
   Future removeTorrent(String torrentHash) async {
     var resp = await session
         .post('${_apiURL}${ApiEndPoint.API_TORRENT_DELETE}', body: {
-      'hashes': torrentHash,
+      'hashes': torrentHash ,
+      'deleteFiles' : false
     });
     if (resp.statusCode != 200) throw InvalidParameterException(resp);
   }
@@ -334,6 +335,7 @@ class QbitTorrentControllerImpl implements QbitTorrentController {
     var resp = await session
         .post('${_apiURL}${ApiEndPoint.API_TORRENT_DELETE}', body: {
       'hashes': torrentHashs.join('|'),
+      'deleteFiles' : false
     });
     if (resp.statusCode != 200) throw InvalidParameterException(resp);
   }
@@ -605,10 +607,13 @@ class QbitTorrentControllerImpl implements QbitTorrentController {
     return null;
   }
 
-  @override
-  Future removeTorrentAndData(String torrentHash) {
-    // TODO: implement remoteData
-    return null;
+
+/// TODO : Change the name to removeTorrentWithData
+@override
+  Future removeTorrentAndData(String torrentHash) async {
+    var resp = await session.post('${_apiURL}${ApiEndPoint.API_TORRENT_DELETE}',
+        body: {'hashes': torrentHash , 'deleteFiles': 'true'});
+    if (resp.statusCode != 200) throw InvalidParameterException(resp);
   }
 
   @override

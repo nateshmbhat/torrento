@@ -18,6 +18,14 @@ class Session implements IQbitTorrentSession {
   }
 
   Future<http.Response> post(dynamic url, {Map<String, String> headers, Map<String,dynamic> body, Encoding encoding}) async {
+
+    body?.keys?.forEach((key){
+      if(body[key]==null) body.remove(key) ;
+      else{
+        body[key] = body[key].toString() ; 
+      }
+    });
+
     http.Response response = await http.post(url, body: body, headers: sessionHeaders);
     log('status : ${response.statusCode} , response body : ' + response.body) ; 
     _updateCookie(response);
