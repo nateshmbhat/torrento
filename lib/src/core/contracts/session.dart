@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 import 'package:http/http.dart' as http ; 
-import 'package:meta/meta.dart' ; 
 
 abstract class ISession {
     Future<http.Response> get(dynamic url, {Map<String, String> headers}) ;
@@ -11,9 +10,6 @@ abstract class ISession {
       Encoding encoding}) ;
 }
 
-abstract class IQbitTorrentSession  extends ISession{
-
-}
 
 abstract class IUTorrentSession extends ISession{
 
