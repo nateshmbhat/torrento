@@ -647,8 +647,11 @@ class QbitTorrentControllerImpl implements QbitTorrentController {
     return resp.body;
   }
 
+// TODO : Implement this 
   @override
-  Future getListOfFilesUnderATorrentJob(String torrentHash) async {}
+  Future getListOfFilesUnderATorrentJob(String torrentHash) async {
+
+  }
 
   @override
   Future getPropertiesOfTorrent(String torrentHash) async {

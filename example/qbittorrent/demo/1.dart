@@ -1,7 +1,7 @@
 import 'demo.dart';
 
 // ADD NEW TORRENT
-main(List<String> args ) async{
+main() async{
   await obj.logIn('natesh' , 'password') ; 
 
   await obj.addTorrent('magnet:?xt=urn:btih:0d18397945bcc9f495818aa2c823ab167dc8da5c&dn=The.Lion.King.2019.1080p.BluRay.H264.AAC-RARBG') ; 
