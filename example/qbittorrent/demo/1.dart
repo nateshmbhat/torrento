@@ -1,18 +1,10 @@
-import 'package:torrential_lib/src/core/contracts/qbittorrent_controller/qbittorrent_controller.dart';
-
-QbitTorrentController obj = new QbitTorrentController('192.168.0.101' , 8080) ; 
-
+import 'demo.dart';
 
 // ADD NEW TORRENT
-void addTorrent() async{
-  await obj.addTorrent('magnet:?xt=urn:btih:0d18397945bcc9f495818aa2c823ab167dc8da5c&dn=The.Lion.King.2019.1080p.BluRay.H264.AAC-RARBG') ; 
-}
-
-
 main(List<String> args ) async{
   await obj.logIn('natesh' , 'password') ; 
 
-  addTorrent() ; 
+  await obj.addTorrent('magnet:?xt=urn:btih:0d18397945bcc9f495818aa2c823ab167dc8da5c&dn=The.Lion.King.2019.1080p.BluRay.H264.AAC-RARBG') ; 
 
   await obj.logOut() ; 
 }

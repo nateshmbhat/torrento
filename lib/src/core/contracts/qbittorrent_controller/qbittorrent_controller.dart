@@ -2,6 +2,7 @@ import 'package:torrential_lib/src/torrent_client_controllers/qbittorrent/qbitto
 import 'package:torrential_lib/torrential_lib.dart';
 
 
+
 /// API Doc at : https://github.com/qbittorrent/qBittorrent/wiki/Web-API-Documentation#general-information
 abstract class QbitTorrentController extends TorrentController {
   factory QbitTorrentController(String serverIp, int serverPort) {
@@ -176,11 +177,10 @@ abstract class QbitTorrentController extends TorrentController {
   Future setTorrentDownloadLimit(
       List<String> torrentHashes, int limitInBytesPerSecond);
 
-  Future setShareLimit(
-      List<String> torrentHashes, double ratioLimit, int seedingTimeLimit);
+  Future setShareLimit(List<String> torrentHashes, double ratioLimit, int seedingTimeLimit);
 
   Future<dynamic> getUploadLimit(List<String> torrentHashes);
-  Future setUploadLimit(List<String> torrentHashes, int limitInBytesPerSecond);
+  Future setTorrentUploadLimit(List<String> torrentHashes, int limitInBytesPerSecond);
 
   Future setTorrentName(String torrentHash, String name);
 

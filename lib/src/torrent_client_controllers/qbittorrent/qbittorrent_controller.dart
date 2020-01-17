@@ -4,12 +4,9 @@ import 'package:http/http.dart';
 import 'package:torrential_lib/src/core/constant.dart';
 import 'package:torrential_lib/src/core/contracts/qbittorrent_controller/qbittorrent_controller.dart';
 import 'package:torrential_lib/src/core/exceptions/exceptions.dart';
-import 'package:torrential_lib/src/core/contracts/torrent_interface.dart';
-
-import './session.dart';
 import 'package:http/http.dart' as http;
-
-import 'utils.dart';
+import 'package:torrential_lib/src/torrent_client_controllers/qbittorrent/session.dart';
+import 'package:torrential_lib/src/torrent_client_controllers/qbittorrent/utils.dart';
 
 enum TorrentFilter {
   all,
@@ -613,6 +610,8 @@ class QbitTorrentControllerImpl implements QbitTorrentController {
     _sendPostAndCheckResponse(ApiEndPoint.API_TORRENT_EDIT_CATEGORY,
         body: {Constant.category: category, Constant.savePath: newSavePath});
   }
+
+  
 
   @override
   Future forceStartTorrent(String torrentHash) async {
