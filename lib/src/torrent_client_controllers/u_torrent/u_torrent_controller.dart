@@ -36,7 +36,7 @@ class _UTorrentControllerImpl implements UTorrentController {
     String authCredentialsBase64Encoded =
         getBase64EncodingOf(username: username, password: password);
 
-    addKVPsToSessionHeaders({'authorization': authCredentialsBase64Encoded});
+    addKVPsToSessionHeaders(<String,String>{'authorization': authCredentialsBase64Encoded});
 
     setSessionToken(await getToken());
   }
@@ -46,7 +46,7 @@ class _UTorrentControllerImpl implements UTorrentController {
     return 'Basic ' + base64.encode(utf8.encode('$username:$password'));
   }
 
-  void addKVPsToSessionHeaders(Map<String, dynamic> keyValuePairs) {
+  void addKVPsToSessionHeaders(Map<String, String> keyValuePairs) {
     _session.sessionHeaders.addAll(keyValuePairs);
   }
 
@@ -320,14 +320,15 @@ class _UTorrentControllerImpl implements UTorrentController {
     return response;
   }
 
+// TODO : don't return response , return the files
   @override
-  Future<http.Response> getListOfFilesUnderATorrentJob(
+  Future<dynamic> getListOfFilesUnderATorrentJob(
       String torrentHash) async {
     String url = '${baseUrl}?action=getfiles&hash=${torrentHash}';
 
     http.Response response = await _session.get(url);
 
-    return response;
+    return response.body;
   }
 
   @override
