@@ -1,7 +1,6 @@
-import 'package:meta/meta.dart';
+import 'dart:async';
 
 abstract class TorrentController {
-  // ! Actions
   // * To handle single torrent
 
   Future logIn(String username, String password);
@@ -42,7 +41,7 @@ abstract class TorrentController {
 
   Future setPropertiesOfTorrent(
     String torrentHash, {
-    @required Map<String, dynamic> propertiesAndValues,
+    Map<String, dynamic> propertiesAndValues,
   });
 
   // ! To get a list of files under a given torrent job
@@ -62,4 +61,3 @@ abstract class TorrentController {
 }
 
 
-abstract class UTorrentApiInterface extends TorrentController {}

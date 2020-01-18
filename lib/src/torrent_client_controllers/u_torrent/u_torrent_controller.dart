@@ -1,7 +1,5 @@
+import 'dart:async';
 import 'dart:convert';
-
-import 'package:meta/meta.dart';
-
 import 'package:html/parser.dart' as html;
 import 'package:http/http.dart' as http;
 import 'package:torrential_lib/src/core/contracts/torrent_interface.dart';
@@ -10,7 +8,7 @@ import 'package:torrential_lib/src/torrent_client_controllers/u_torrent/session.
 
 abstract class UTorrentController extends TorrentController {
   factory UTorrentController(
-          {@required String serverIp, @required int serverPort}) =>
+          { String serverIp,  int serverPort}) =>
       _UTorrentControllerImpl(
         serverIp: serverIp,
         serverPort: serverPort,
@@ -26,7 +24,7 @@ class _UTorrentControllerImpl implements UTorrentController {
 
   Map<String, String> actions;
 
-  _UTorrentControllerImpl({@required this.serverIp, @required this.serverPort})
+  _UTorrentControllerImpl({ this.serverIp,  this.serverPort})
       : baseUrl = 'http://$serverIp:$serverPort/gui/' {
     assert(serverIp != null);
     assert(serverPort != null);
@@ -42,7 +40,7 @@ class _UTorrentControllerImpl implements UTorrentController {
   }
 
   String getBase64EncodingOf(
-      {@required String username, @required String password}) {
+      { String username,  String password}) {
     return 'Basic ' + base64.encode(utf8.encode('$username:$password'));
   }
 
