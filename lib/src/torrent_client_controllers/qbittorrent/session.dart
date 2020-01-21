@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:developer';
 
@@ -9,7 +10,8 @@ import 'package:torrento/src/core/contracts/qbittorrent_controller/qbittorrent_s
 class Session implements IQbitTorrentSession {
   Map<String, String> sessionHeaders = {};
 
-  Future<http.Response> get(dynamic url, {Map<String, String> headers}) async {
+  @override
+  Future<http.Response> get(String url, {Map<String, String> headers}) async {
     /// headers receives as per the headers arg is sent to the API>
     http.Response response = await http.get(url, headers: sessionHeaders);
     _updateCookie(response);
@@ -17,6 +19,7 @@ class Session implements IQbitTorrentSession {
     return response ; 
   }
 
+  @override
   Future<http.Response> post(dynamic url, {Map<String, String> headers, Map<String,dynamic> body, Encoding encoding}) async {
 
     body?.keys?.forEach((key){

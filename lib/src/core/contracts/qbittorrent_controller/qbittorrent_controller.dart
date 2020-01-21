@@ -1,6 +1,6 @@
 import 'dart:async';
+import 'package:torrento/src/core/contracts/torrent_interface.dart';
 import 'package:torrento/src/torrent_client_controllers/qbittorrent/qbittorrent_controller.dart';
-import 'package:torrento/torrential_lib.dart';
 
 
 
