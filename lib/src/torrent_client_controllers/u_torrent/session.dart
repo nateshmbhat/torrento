@@ -1,8 +1,14 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:developer';
 import 'package:http/http.dart' as http;
 
 const String contentType = 'application/json';
+
+// TODO : change Session to UtorrentSession extends Session
+// TODO : put contentType inside a class
+// TODO : in your implmenentation use a exception class to hold the response object instead of returning it from methods
+// TODO : return the parsed response body from utorrent methods appropriately
 
 /// Maintains various tokens and headers to keep the session
 /// going.

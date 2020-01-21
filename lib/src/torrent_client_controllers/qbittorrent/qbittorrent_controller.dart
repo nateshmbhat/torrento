@@ -647,16 +647,11 @@ class QbitTorrentControllerImpl implements QbitTorrentController {
     return resp.body;
   }
 
-// TODO : Implement this 
   @override
-  Future getListOfFilesUnderATorrentJob(String torrentHash) async {
-
+  Future getFilesOfTorrent(String torrentHash) async {
+    // TODO : Implement this 
   }
 
-  @override
-  Future getPropertiesOfTorrent(String torrentHash) async {
-    return getTorrentProperties(torrentHash);
-  }
 
   @override
   Future getUploadLimit(List<String> torrentHashes) async {
@@ -685,7 +680,6 @@ class QbitTorrentControllerImpl implements QbitTorrentController {
     });
   }
 
-// TODO : Test and check if "\n" works or should be replaced by "%0A"
   @override
   Future removeCategories(List<String> categories) async {
     _sendPostAndCheckResponse(ApiEndPoint.API_TORRENT_REMOVE_CATEGORY, body: {
@@ -759,11 +753,10 @@ class QbitTorrentControllerImpl implements QbitTorrentController {
     });
   }
 
-// TODO : Propose change of name in the interface to setTorrentProperties 
   @override
-  Future setPropertiesOfTorrent(String torrentHash,
+  Future setTorrentProperties(String torrentHash,
       {Map<String, dynamic> propertiesAndValues}) async {
-
+        //TODO : Implement this
   }
 
   @override
