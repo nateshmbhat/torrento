@@ -1,4 +1,4 @@
-import 'package:torrential_lib/src/core/contracts/qbittorrent_controller/qbittorrent_controller.dart';
+import 'package:torrento/src/core/contracts/qbittorrent_controller/qbittorrent_controller.dart';
 
 QbitTorrentController obj = new QbitTorrentController('192.168.43.51' , 8080) ; 
 

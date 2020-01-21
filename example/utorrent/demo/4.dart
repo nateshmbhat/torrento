@@ -4,7 +4,7 @@ import 'demo.dart' ;
 main(List<String> args) async {
   await obj.logIn('natesh', 'password');
 
-  await obj.unpauseTorrent('0d18397945bcc9f495818aa2c823ab167dc8da5c') ;  // Torrent hash of Lion King
+  await obj.resumeTorrent('0d18397945bcc9f495818aa2c823ab167dc8da5c') ;  // Torrent hash of Lion King
 
   await obj.logOut();
 }

@@ -1,6 +1,6 @@
 
-import 'package:torrential_lib/src/core/contracts/qbittorrent_controller/qbittorrent_controller.dart';
-import 'package:torrential_lib/src/torrent_client_controllers/qbittorrent/qbittorrent_controller.dart';
+import 'package:torrento/src/core/contracts/qbittorrent_controller/qbittorrent_controller.dart';
+import 'package:torrento/src/torrent_client_controllers/qbittorrent/qbittorrent_controller.dart';
 
 
 main(List<String> args ) async{

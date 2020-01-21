@@ -1,12 +1,12 @@
 import 'dart:async';
 import 'dart:convert';
 import 'package:http/http.dart';
-import 'package:torrential_lib/src/core/constant.dart';
-import 'package:torrential_lib/src/core/contracts/qbittorrent_controller/qbittorrent_controller.dart';
-import 'package:torrential_lib/src/core/exceptions/exceptions.dart';
+import 'package:torrento/src/core/constant.dart';
+import 'package:torrento/src/core/contracts/qbittorrent_controller/qbittorrent_controller.dart';
+import 'package:torrento/src/core/exceptions/exceptions.dart';
 import 'package:http/http.dart' as http;
-import 'package:torrential_lib/src/torrent_client_controllers/qbittorrent/session.dart';
-import 'package:torrential_lib/src/torrent_client_controllers/qbittorrent/utils.dart';
+import 'package:torrento/src/torrent_client_controllers/qbittorrent/session.dart';
+import 'package:torrento/src/torrent_client_controllers/qbittorrent/utils.dart';
 
 enum TorrentFilter {
   all,
@@ -825,21 +825,14 @@ _sendPostAndCheckResponse(ApiEndPoint.API_TORRENT_SET_FILE_PRIORITY,
         });
   }
 
-// TODO: propose renaming unpause to resumeTorrent
-  @override
-  Future unpauseTorrent(String torrentHash) async {
-    unpauseMultipleTorrents([torrentHash]) ; 
-  }
 
-// TODO: propose renaming unpause to resumeTorrent
-  @override
-  @override
-  Future unpauseMultipleTorrents(List<String> torrentHashes) async {
-    _sendPostAndCheckResponse(ApiEndPoint.API_TORRENT_RESUME, 
-        body : {
-          Constant.hashes : torrentHashes.join('|'), 
-        });
-  }
+  // @override
+  // Future (List<String> torrentHashes) async {
+  //   _sendPostAndCheckResponse(ApiEndPoint.API_TORRENT_RESUME, 
+  //       body : {
+  //         Constant.hashes : torrentHashes.join('|'), 
+  //       });
+  // }
 
   @override
   Future addTorrent(String url,
@@ -871,4 +864,5 @@ _sendPostAndCheckResponse(ApiEndPoint.API_TORRENT_SET_FILE_PRIORITY,
         sequentialDownload: sequentialDownload,
         prioritizeFirstLastPiece: prioritizeFirstLastPiece);
   }
+
 }

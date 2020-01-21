@@ -2,9 +2,9 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:html/parser.dart' as html;
 import 'package:http/http.dart' as http;
-import 'package:torrential_lib/src/core/contracts/torrent_interface.dart';
-import 'package:torrential_lib/src/core/exceptions/exceptions.dart';
-import 'package:torrential_lib/src/torrent_client_controllers/u_torrent/session.dart';
+import 'package:torrento/src/core/contracts/torrent_interface.dart';
+import 'package:torrento/src/core/exceptions/exceptions.dart';
+import 'package:torrento/src/torrent_client_controllers/u_torrent/session.dart';
 
 abstract class UTorrentController extends TorrentController {
   factory UTorrentController(

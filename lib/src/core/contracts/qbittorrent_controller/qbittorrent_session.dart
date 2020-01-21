@@ -1,5 +1,5 @@
 
-import 'package:torrential_lib/src/core/contracts/session.dart';
+import 'package:torrento/src/core/contracts/session.dart';
 
 abstract class IQbitTorrentSession  extends ISession{
 

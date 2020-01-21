@@ -11,8 +11,6 @@ abstract class TorrentController {
   Future resumeTorrent(String torrentHash);
 
   Future pauseTorrent(String torrentHash);
-  Future unpauseTorrent(String torrentHash);
-
   Future forceStartTorrent(String torrentHash);
 
   Future removeTorrent(String torrentHash);
@@ -28,7 +26,6 @@ abstract class TorrentController {
   Future resumeMultipleTorrents(List<String> torrentHashes);
 
   Future pauseMultipleTorrents(List<String> torrentHashes);
-  Future unpauseMultipleTorrents(List<String> torrentHash);
 
   Future forceStartMultipleTorrents(List<String> torrentHashes);
 
@@ -37,15 +34,15 @@ abstract class TorrentController {
   Future removeMultipleTorrentsAndData(List<String> torrentHash);
 
   // ! get and set properties of torrents
-  Future getPropertiesOfTorrent(String torrentHash);
+  Future getTorrentProperties(String torrentHash);
 
-  Future setPropertiesOfTorrent(
+  Future setTorrentProperties(
     String torrentHash, {
     Map<String, dynamic> propertiesAndValues,
   });
 
   // ! To get a list of files under a given torrent job
-  Future getListOfFilesUnderATorrentJob(String torrentHash);
+  Future getFilesOfTorrent(String torrentHash);
 
   // ! To get a list of torrents and their associated properties
   Future getTorrentsList();
