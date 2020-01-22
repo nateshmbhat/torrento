@@ -1,9 +1,12 @@
 # Changelog
-Implements and wraps around 95% of the features of qbittorrent client api and all the functionalities of utorrent api
 
-[Unreleased]: https://github.com/nateshmbhat/torrential-lib
+[Unreleased]: https://github.com/nateshmbhat/torrento
 
 ## [Unreleased]
+
+
+## [0.0.4] - 2020-01-20
+Changed some of the method names in the interface
 
 ## [0.0.1] - 2020-01-18
 
