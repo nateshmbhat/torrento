@@ -318,9 +318,8 @@ class _UTorrentControllerImpl implements UTorrentController {
     return response;
   }
 
-// TODO : don't return response , return the files
   @override
-  Future<dynamic> getListOfFilesUnderATorrentJob(
+  Future<dynamic> getFilesOfTorrent(
       String torrentHash) async {
     String url = '${baseUrl}?action=getfiles&hash=${torrentHash}';
 
@@ -330,7 +329,7 @@ class _UTorrentControllerImpl implements UTorrentController {
   }
 
   @override
-  Future<http.Response> getPropertiesOfTorrent(String torrentHash) async {
+  Future<http.Response> getTorrentProperties(String torrentHash) async {
     String url = '${baseUrl}?action=getprops&hash=${torrentHash}';
 
     http.Response response = await _session.get(url);
@@ -361,7 +360,7 @@ class _UTorrentControllerImpl implements UTorrentController {
   }
 
   @override
-  Future setPropertiesOfTorrent(String torrentHash,
+  Future setTorrentProperties(String torrentHash,
       {Map<String, dynamic> propertiesAndValues}) async {
     String url =
         '${baseUrl}?action=setprops${generateValuePairsString(propertiesAndValues)}';
