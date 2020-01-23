@@ -1,4 +1,4 @@
-# Torrential-lib
+# Torrento
 
 A **Dart package** that wraps various Web APIS for **controlling and managing torrent clients**.
 
