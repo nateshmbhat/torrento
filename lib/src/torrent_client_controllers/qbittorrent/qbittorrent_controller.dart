@@ -32,7 +32,7 @@ class QbitTorrentControllerImpl implements QbitTorrentController {
   final String API_DOC_URL =
       'https://github.com/qbittorrent/qBittorrent/wiki/Web-API-Documentation#general-information';
 
-  QbitTorrentControllerImpl(this._serverIP, this._serverPort){
+  QbitTorrentControllerImpl(this._serverIP, this._serverPort) {
     _apiURL = 'http://${_serverIP}:${_serverPort}/api/v2';
     session = Session();
   }
@@ -69,18 +69,20 @@ class QbitTorrentControllerImpl implements QbitTorrentController {
         '${_apiURL}${ApiEndPoint.API_AUTH_LOGIN}',
         body: {Constant.username: username, Constant.password: password});
 
-    if (resp.body.trim() == "Fails.") throw InvalidCredentialsException(resp);
+    if (resp.body.trim() == "Fails.") {
+      throw InvalidCredentialsException(resp);
+    }
     _checkForInvalidParameters(resp);
   }
 
   @override
   Future logOut() async {
-    _sendPostAndCheckResponse(ApiEndPoint.API_AUTH_LOGOUT);
+    await _sendPostAndCheckResponse(ApiEndPoint.API_AUTH_LOGOUT);
   }
 
   @override
   Future<bool> isLoggedIn() async {
-    _sendPostAndCheckResponse(ApiEndPoint.API_APP_VERSION);
+    await _sendPostAndCheckResponse(ApiEndPoint.API_APP_VERSION);
     return true;
   }
 
@@ -146,7 +148,7 @@ class QbitTorrentControllerImpl implements QbitTorrentController {
       bool critical = true,
       int last_known_id = -1}) async {
     Response resp =
-        await _sendPostAndCheckResponse(ApiEndPoint.API_LOG_MAIN, body: {
+        await await _sendPostAndCheckResponse(ApiEndPoint.API_LOG_MAIN, body: {
       Constant.normal: json.encode(normal),
       Constant.info: info,
       Constant.warning: warning,
@@ -262,13 +264,24 @@ class QbitTorrentControllerImpl implements QbitTorrentController {
       int offset,
       List<String> hashes}) async {
     final Map<String, dynamic> body = {};
-    if (filter != null)
+    if (filter != null) {
       body[Constant.filter] = filter.toString().split('.').last;
-    if (category != null) body[Constant.category] = category;
-    if (sort != null) body[Constant.sort] = sort;
-    if (reverse != null) body[Constant.reverse] = reverse.toString();
-    if (offset != null) body[Constant.offset] = offset.toString();
-    if (hashes != null) body[Constant.hashes] = hashes.join('|');
+    }
+    if (category != null) {
+      body[Constant.category] = category;
+    }
+    if (sort != null) {
+      body[Constant.sort] = sort;
+    }
+    if (reverse != null) {
+      body[Constant.reverse] = reverse.toString();
+    }
+    if (offset != null) {
+      body[Constant.offset] = offset.toString();
+    }
+    if (hashes != null) {
+      body[Constant.hashes] = hashes.join('|');
+    }
 
     Response resp = await session
         .post('${_apiURL}${ApiEndPoint.API_TORRENT_INFO}', body: body);
@@ -435,27 +448,49 @@ class QbitTorrentControllerImpl implements QbitTorrentController {
       Constant.urls: urls.join('%0A'),
     };
 
-    if (torrentFileContent != null)
+    if (torrentFileContent != null) {
       body[Constant.torrents] = torrentFileContent;
-    if (skip_checking != null)
+    }
+    if (skip_checking != null) {
       body[Constant.skip_checking] = skip_checking;
-    if (paused != null) body[Constant.paused] = paused;
-    if (root_folder != null)
+    }
+    if (paused != null) {
+      body[Constant.paused] = paused;
+    }
+    if (root_folder != null) {
       body[Constant.root_folder] = root_folder;
-    if (sequentialDownload != null)
+    }
+    if (sequentialDownload != null) {
       body[Constant.sequentialDownload] = sequentialDownload;
-    if (prioritizeFirstLastPiece != null)
+    }
+    if (prioritizeFirstLastPiece != null) {
       body[Constant.firstLastPiecePrio] = prioritizeFirstLastPiece;
+    }
 
-    if (savepath != null) body[Constant.savePath] = savepath;
-    if (cookie != null) body[Constant.cookie] = cookie;
-    if (category != null) body[Constant.category] = category;
-    if (rename != null) body[Constant.rename] = rename;
-    if (uploadLimit != null) body[Constant.upLimit] = uploadLimit;
-    if (downloadLimit != null)
+    if (savepath != null) {
+      body[Constant.savePath] = savepath;
+    }
+    if (cookie != null) {
+      body[Constant.cookie] = cookie;
+    }
+    if (category != null) {
+      body[Constant.category] = category;
+    }
+    if (rename != null) {
+      body[Constant.rename] = rename;
+    }
+    if (uploadLimit != null) {
+      body[Constant.upLimit] = uploadLimit;
+    }
+    if (downloadLimit != null) {
       body[Constant.dlLimit] = downloadLimit;
-    if (useAutoTMM != null) body[Constant.useAutoTMM] = useAutoTMM;
-    if (torrentFileContent == null) body.remove(Constant.torrents);
+    }
+    if (useAutoTMM != null) {
+      body[Constant.useAutoTMM] = useAutoTMM;
+    }
+    if (torrentFileContent == null) {
+      body.remove(Constant.torrents);
+    }
 
     Response resp = await session
         .post('${_apiURL}${ApiEndPoint.API_TORRENT_ADD}', body: body);
@@ -595,33 +630,31 @@ class QbitTorrentControllerImpl implements QbitTorrentController {
 
   @override
   Future deleteTags(List<String> tags) async {
-    _sendPostAndCheckResponse(ApiEndPoint.API_TORRENT_DELETE_TAGS,
+    await _sendPostAndCheckResponse(ApiEndPoint.API_TORRENT_DELETE_TAGS,
         body: {Constant.tags: tags.join(',')});
   }
 
   @override
   Future decreasePriority(List<String> torrentHashes) async {
-    _sendPostAndCheckResponse(ApiEndPoint.API_TORRENT_DECREASE_PRIORITY,
+    await _sendPostAndCheckResponse(ApiEndPoint.API_TORRENT_DECREASE_PRIORITY,
         body: {Constant.hashes: torrentHashes.join('|')});
   }
 
   @override
   Future editCategory(String category, String newSavePath) async {
-    _sendPostAndCheckResponse(ApiEndPoint.API_TORRENT_EDIT_CATEGORY,
+    await _sendPostAndCheckResponse(ApiEndPoint.API_TORRENT_EDIT_CATEGORY,
         body: {Constant.category: category, Constant.savePath: newSavePath});
   }
 
-  
-
   @override
   Future forceStartTorrent(String torrentHash) async {
-    _sendPostAndCheckResponse(ApiEndPoint.API_TORRENT_SET_FORCE_START,
+    await _sendPostAndCheckResponse(ApiEndPoint.API_TORRENT_SET_FORCE_START,
         body: {Constant.hashes: torrentHash});
   }
 
   @override
   Future forceStartMultipleTorrents(List<String> torrentHashes) async {
-    _sendPostAndCheckResponse(ApiEndPoint.API_TORRENT_SET_FORCE_START,
+    await _sendPostAndCheckResponse(ApiEndPoint.API_TORRENT_SET_FORCE_START,
         body: {Constant.hashes: torrentHashes.join('|')});
   }
 
@@ -649,9 +682,8 @@ class QbitTorrentControllerImpl implements QbitTorrentController {
 
   @override
   Future getFilesOfTorrent(String torrentHash) async {
-    // TODO : Implement this 
+    // TODO : Implement this
   }
-
 
   @override
   Future getUploadLimit(List<String> torrentHashes) async {
@@ -663,7 +695,7 @@ class QbitTorrentControllerImpl implements QbitTorrentController {
 
   @override
   Future increasePriority(List<String> torrentHashes) async {
-    _sendPostAndCheckResponse(ApiEndPoint.API_TORRENT_INCREASE_PRIORITY,
+    await _sendPostAndCheckResponse(ApiEndPoint.API_TORRENT_INCREASE_PRIORITY,
         body: {Constant.hashes: torrentHashes.join('|')});
   }
 
@@ -674,7 +706,7 @@ class QbitTorrentControllerImpl implements QbitTorrentController {
 
   @override
   Future removeMultipleTorrentsAndData(List<String> torrentHashes) async {
-    _sendPostAndCheckResponse(ApiEndPoint.API_TORRENT_DELETE, body: {
+    await _sendPostAndCheckResponse(ApiEndPoint.API_TORRENT_DELETE, body: {
       Constant.hashes: torrentHashes.join('|'),
       Constant.deleteFiles: Constant.trueString
     });
@@ -682,15 +714,16 @@ class QbitTorrentControllerImpl implements QbitTorrentController {
 
   @override
   Future removeCategories(List<String> categories) async {
-    _sendPostAndCheckResponse(ApiEndPoint.API_TORRENT_REMOVE_CATEGORY, body: {
-      Constant.categories: categories.join('\n'),
-    });
+    await _sendPostAndCheckResponse(ApiEndPoint.API_TORRENT_REMOVE_CATEGORY,
+        body: {
+          Constant.categories: categories.join('\n'),
+        });
   }
 
   @override
   Future removeTorrentTags(
       List<String> torrentHashes, List<String> tags) async {
-    _sendPostAndCheckResponse(ApiEndPoint.API_TORRENT_DELETE_TAGS, body: {
+    await _sendPostAndCheckResponse(ApiEndPoint.API_TORRENT_DELETE_TAGS, body: {
       Constant.tags: tags.join(','),
     });
   }
@@ -698,7 +731,7 @@ class QbitTorrentControllerImpl implements QbitTorrentController {
   @override
   Future setAutoTorrentManagement(
       List<String> torrentHashes, bool enable) async {
-    _sendPostAndCheckResponse(ApiEndPoint.API_TORRENT_SET_AUTOMANAGEMENT,
+    await _sendPostAndCheckResponse(ApiEndPoint.API_TORRENT_SET_AUTOMANAGEMENT,
         body: {
           Constant.hashes: torrentHashes.join('|'),
           Constant.enable: enable
@@ -707,16 +740,17 @@ class QbitTorrentControllerImpl implements QbitTorrentController {
 
   @override
   Future setCategory(List<String> torrentHashes, String category) async {
-    _sendPostAndCheckResponse(ApiEndPoint.API_TORRENT_SET_CATEGORY, body: {
-      Constant.hashes: torrentHashes.join('|'),
-      Constant.category: category
-    });
+    await _sendPostAndCheckResponse(ApiEndPoint.API_TORRENT_SET_CATEGORY,
+        body: {
+          Constant.hashes: torrentHashes.join('|'),
+          Constant.category: category
+        });
   }
 
   @override
   Future setTorrentDownloadLimit(
       List<String> torrentHashes, int limitInBytesPerSecond) async {
-    _sendPostAndCheckResponse(ApiEndPoint.API_TORRENT_SET_DOWNLOAD_LIMIT,
+    await _sendPostAndCheckResponse(ApiEndPoint.API_TORRENT_SET_DOWNLOAD_LIMIT,
         body: {
           Constant.hashes: torrentHashes.join('|'),
           Constant.limit: limitInBytesPerSecond
@@ -725,7 +759,8 @@ class QbitTorrentControllerImpl implements QbitTorrentController {
 
   @override
   Future setFirstOrLastPiecePriority(List<String> torrentHashes) async {
-    _sendPostAndCheckResponse(ApiEndPoint.API_TORRENT_TOGGLE_FIRST_LAST_PRIO,
+    await _sendPostAndCheckResponse(
+        ApiEndPoint.API_TORRENT_TOGGLE_FIRST_LAST_PRIO,
         body: {
           Constant.hashes: torrentHashes.join('|'),
         });
@@ -733,97 +768,98 @@ class QbitTorrentControllerImpl implements QbitTorrentController {
 
   @override
   Future setForceStart(List<String> torrentHashes, bool value) async {
-    _sendPostAndCheckResponse(ApiEndPoint.API_TORRENT_SET_FORCE_START, body: {
-      Constant.hashes: torrentHashes.join('|'),
-      Constant.value: value
-    });
+    await _sendPostAndCheckResponse(ApiEndPoint.API_TORRENT_SET_FORCE_START,
+        body: {
+          Constant.hashes: torrentHashes.join('|'),
+          Constant.value: value
+        });
   }
 
   @override
   Future setMaxPriority(List<String> torrentHashes) async {
-    _sendPostAndCheckResponse(ApiEndPoint.API_TORRENT_TOP_PRIORITY, body: {
-      Constant.hashes: torrentHashes.join('|'),
-    });
+    await _sendPostAndCheckResponse(ApiEndPoint.API_TORRENT_TOP_PRIORITY,
+        body: {
+          Constant.hashes: torrentHashes.join('|'),
+        });
   }
 
   @override
   Future setMinPriority(List<String> torrentHashes) async {
-    _sendPostAndCheckResponse(ApiEndPoint.API_TORRENT_BOTTOM_PRIORITY, body: {
-      Constant.hashes: torrentHashes.join('|'),
-    });
+    await _sendPostAndCheckResponse(ApiEndPoint.API_TORRENT_BOTTOM_PRIORITY,
+        body: {
+          Constant.hashes: torrentHashes.join('|'),
+        });
   }
 
   @override
   Future setTorrentProperties(String torrentHash,
       {Map<String, dynamic> propertiesAndValues}) async {
-        //TODO : Implement this
+    //TODO : Implement this
   }
 
   @override
-  Future setShareLimit(
-      List<String> torrentHashes, double ratioLimit, int seedingTimeLimit) async {
-
-        _sendPostAndCheckResponse(ApiEndPoint.API_TORRENT_SET_SHARE_LIMIT , 
-        body : {
-          Constant.hashes : torrentHashes.join('|') , 
-          Constant.ratioLimit : ratioLimit , 
-          Constant.seedingTimeLimit : seedingTimeLimit 
+  Future setShareLimit(List<String> torrentHashes, double ratioLimit,
+      int seedingTimeLimit) async {
+    await _sendPostAndCheckResponse(ApiEndPoint.API_TORRENT_SET_SHARE_LIMIT,
+        body: {
+          Constant.hashes: torrentHashes.join('|'),
+          Constant.ratioLimit: ratioLimit,
+          Constant.seedingTimeLimit: seedingTimeLimit
         });
   }
 
   @override
   Future setSuperSeeding(List<String> torrentHashes, bool value) async {
-        _sendPostAndCheckResponse(ApiEndPoint.API_TORRENT_SET_SUPER_SEEDING, 
-        body : {
-          Constant.hashes : torrentHashes.join('|') , 
-          Constant.value : value , 
+    await _sendPostAndCheckResponse(ApiEndPoint.API_TORRENT_SET_SUPER_SEEDING,
+        body: {
+          Constant.hashes: torrentHashes.join('|'),
+          Constant.value: value,
         });
   }
 
   @override
   Future setTorrentName(String torrentHash, String name) async {
-_sendPostAndCheckResponse(ApiEndPoint.API_TORRENT_RENAME, 
-        body : {
-          Constant.hash : torrentHash , 
-          Constant.name : name , 
-        });
+    await _sendPostAndCheckResponse(ApiEndPoint.API_TORRENT_RENAME, body: {
+      Constant.hash: torrentHash,
+      Constant.name: name,
+    });
   }
 
   @override
-  Future setTorrentUploadLimit(List<String> torrentHashes, int limitInBytesPerSecond) async {
-_sendPostAndCheckResponse(ApiEndPoint.API_TORRENT_SET_UPLOAD_LIMIT, 
-        body : {
-          Constant.hashes : torrentHashes.join('|') , 
-          Constant.limit : limitInBytesPerSecond, 
+  Future setTorrentUploadLimit(
+      List<String> torrentHashes, int limitInBytesPerSecond) async {
+    await _sendPostAndCheckResponse(ApiEndPoint.API_TORRENT_SET_UPLOAD_LIMIT,
+        body: {
+          Constant.hashes: torrentHashes.join('|'),
+          Constant.limit: limitInBytesPerSecond,
         });
   }
 
   @override
   Future setfilePriority(
       String torrentHash, List<String> fileIds, int priority) async {
-
-_sendPostAndCheckResponse(ApiEndPoint.API_TORRENT_SET_FILE_PRIORITY, 
-        body : {
-          Constant.hash : torrentHash , 
-          Constant.id : fileIds.join('|'), 
-          Constant.priority : priority , 
+    await _sendPostAndCheckResponse(ApiEndPoint.API_TORRENT_SET_FILE_PRIORITY,
+        body: {
+          Constant.hash: torrentHash,
+          Constant.id: fileIds.join('|'),
+          Constant.priority: priority,
         });
   }
 
   @override
   Future toggleSequentialDownload(List<String> torrentHashes) async {
-    _sendPostAndCheckResponse(ApiEndPoint.API_TORRENT_TOGGLE_SEQUENTIAL_DOWNLOAD, 
-        body : {
-          Constant.hashes : torrentHashes.join('|') , 
+    await _sendPostAndCheckResponse(
+        ApiEndPoint.API_TORRENT_TOGGLE_SEQUENTIAL_DOWNLOAD,
+        body: {
+          Constant.hashes: torrentHashes.join('|'),
         });
   }
 
-
   // @override
   // Future (List<String> torrentHashes) async {
-  //   _sendPostAndCheckResponse(ApiEndPoint.API_TORRENT_RESUME, 
+  //   await _sendPostAndCheckResponse(ApiEndPoint.API_TORRENT_RESUME,
   //       body : {
-  //         Constant.hashes : torrentHashes.join('|'), 
+  //         Constant.hashes : torrentHashes.join('|'),
   //       });
   // }
 
@@ -857,5 +893,4 @@ _sendPostAndCheckResponse(ApiEndPoint.API_TORRENT_SET_FILE_PRIORITY,
         sequentialDownload: sequentialDownload,
         prioritizeFirstLastPiece: prioritizeFirstLastPiece);
   }
-
 }
