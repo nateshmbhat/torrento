@@ -1,4 +1,4 @@
-import 'package:torrento/src/utorrent/u_torrent_controller.dart';
+import 'package:torrento/torrento.dart';
 
 UTorrentController obj =
     UTorrentController(serverIp: '192.168.43.18', serverPort: 5000);
