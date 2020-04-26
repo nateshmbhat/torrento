@@ -491,8 +491,8 @@ class QbitTorrentControllerImpl implements QbitTorrentController {
   }
 
   @override
-  Future<void> addTorrentTrackers(String torrentHash,
-      List<String> trackers) async {
+  Future<void> addTorrentTrackers(
+      String torrentHash, List<String> trackers) async {
     Response resp = await session.post(
         '${_apiURL}${QbitTorrentApiEndPoint.API_TORRENT_ADD_TRACKERS}',
         body: {
@@ -528,8 +528,8 @@ class QbitTorrentControllerImpl implements QbitTorrentController {
 
   /// Returns true if successfully added
   @override
-  Future<void> addTorrentPeers(List<String> torrentHashes,
-      List<String> peers) async {
+  Future<void> addTorrentPeers(
+      List<String> torrentHashes, List<String> peers) async {
     Response resp = await session.post(
         '${_apiURL}${QbitTorrentApiEndPoint.API_TORRENT_ADD_PEERS}',
         body: {
@@ -605,8 +605,8 @@ class QbitTorrentControllerImpl implements QbitTorrentController {
   }
 
   @override
-  Future<void> addTorrentTags(List<String> torrentHashes,
-      List<String> tags) async {
+  Future<void> addTorrentTags(
+      List<String> torrentHashes, List<String> tags) async {
     Response resp = await session.post(
         '${_apiURL}${QbitTorrentApiEndPoint.API_TORRENT_ADD_TAGS}',
         body: {
@@ -687,9 +687,10 @@ class QbitTorrentControllerImpl implements QbitTorrentController {
   @override
   Future<List<dynamic>> getFilesOfTorrent(String torrentHash) async {
     Response resp = await _sendPostAndCheckResponse(
-        QbitTorrentApiEndPoint.API_TORRENT_FILES, body: {
-      Constant.hash: torrentHash,
-    });
+        QbitTorrentApiEndPoint.API_TORRENT_FILES,
+        body: {
+          Constant.hash: torrentHash,
+        });
     return json.decode(resp.body);
   }
 
@@ -884,7 +885,7 @@ class QbitTorrentControllerImpl implements QbitTorrentController {
   @override
   Future<void> addTorrent(String url,
       {String torrentFileContent,
-        String savePath,
+      String savePath,
       String cookie,
       String category,
       bool skip_checking = false,

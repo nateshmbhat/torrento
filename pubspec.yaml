@@ -1,6 +1,6 @@
 name: torrento
-description: An API wrapper for multiple torrent clients to remotely control torrents 
-version: 0.1.0
+description: An API wrapper for multiple torrent clients to remotely control torrents
+version: 0.1.5
 homepage: https://github.com/nateshmbhat/torrento
 
 dependencies:

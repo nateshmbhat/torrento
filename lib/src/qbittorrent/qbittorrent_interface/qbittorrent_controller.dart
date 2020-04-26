@@ -118,7 +118,7 @@ abstract class QbitTorrentController extends TorrentController {
   @override
   Future addTorrent(String url,
       {String torrentFileContent,
-        String savePath,
+      String savePath,
       String cookie,
       String category,
       bool skip_checking = false,
