@@ -10,8 +10,6 @@ import 'package:torrento/src/qbittorrent/qbittorrent_util.dart';
 
 // TODO : Add method  Get and set application preferences
 
-// TODO : check if all API end points in the QbitTorrentApiEndPoint class are used in the implemention . Any missing end point in the implementation needs to be added to the QBitTorrentController interface
-
 class QbitTorrentControllerImpl implements QbitTorrentController {
   // API Doc at : https://github.com/qbittorrent/qBittorrent/wiki/Web-API-Documentation#general-information
   final String _serverIP;
@@ -337,7 +335,7 @@ class QbitTorrentControllerImpl implements QbitTorrentController {
   }
 
   @override
-  Future pauseMultipleTorrents(List<String> torrentHashs) async {
+  Future<void> pauseMultipleTorrents(List<String> torrentHashs) async {
     Response resp = await session.post(
         '${_apiURL}${QbitTorrentApiEndPoint.API_TORRENT_PAUSE}',
         body: {Constant.hashes: torrentHashs.join('|')});
@@ -345,7 +343,7 @@ class QbitTorrentControllerImpl implements QbitTorrentController {
   }
 
   @override
-  Future pauseTorrent(String torrentHash) async {
+  Future<void> pauseTorrent(String torrentHash) async {
     Response resp = await session.post(
         '${_apiURL}${QbitTorrentApiEndPoint.API_TORRENT_PAUSE}',
         body: {Constant.hashes: torrentHash});
@@ -353,7 +351,7 @@ class QbitTorrentControllerImpl implements QbitTorrentController {
   }
 
   @override
-  Future resumeTorrent(String torrentHash) async {
+  Future<void> resumeTorrent(String torrentHash) async {
     Response resp = await session.post(
         '${_apiURL}${QbitTorrentApiEndPoint.API_TORRENT_RESUME}',
         body: {Constant.hashes: torrentHash});
@@ -361,7 +359,7 @@ class QbitTorrentControllerImpl implements QbitTorrentController {
   }
 
   @override
-  Future resumeMultipleTorrents(List<String> torrentHashs) async {
+  Future<void> resumeMultipleTorrents(List<String> torrentHashs) async {
     Response resp = await session.post(
         '${_apiURL}${QbitTorrentApiEndPoint.API_TORRENT_RESUME}',
         body: {Constant.hashes: torrentHashs.join('|')});
@@ -369,7 +367,7 @@ class QbitTorrentControllerImpl implements QbitTorrentController {
   }
 
   @override
-  Future removeTorrent(String torrentHash) async {
+  Future<void> removeTorrent(String torrentHash) async {
     Response resp = await session.post(
         '${_apiURL}${QbitTorrentApiEndPoint.API_TORRENT_DELETE}',
         body: {Constant.hashes: torrentHash, Constant.deleteFiles: false});
@@ -377,7 +375,7 @@ class QbitTorrentControllerImpl implements QbitTorrentController {
   }
 
   @override
-  Future removeMultipleTorrents(List<String> torrentHashs) async {
+  Future<void> removeMultipleTorrents(List<String> torrentHashs) async {
     Response resp = await session
         .post('${_apiURL}${QbitTorrentApiEndPoint.API_TORRENT_DELETE}', body: {
       Constant.hashes: torrentHashs.join('|'),
@@ -388,7 +386,7 @@ class QbitTorrentControllerImpl implements QbitTorrentController {
   }
 
   @override
-  Future removeMultipleTorrentsWithData(List<String> torrentHashs) async {
+  Future<void> removeMultipleTorrentsWithData(List<String> torrentHashs) async {
     Response resp = await session
         .post('${_apiURL}${QbitTorrentApiEndPoint.API_TORRENT_DELETE}', body: {
       Constant.hashes: torrentHashs.join('|'),
@@ -398,7 +396,7 @@ class QbitTorrentControllerImpl implements QbitTorrentController {
   }
 
   @override
-  Future recheckMultipleTorrents(List<String> torrentHashs) async {
+  Future<void> recheckMultipleTorrents(List<String> torrentHashs) async {
     Response resp = await session.post(
         '${_apiURL}${QbitTorrentApiEndPoint.API_TORRENT_RECHECK}',
         body: {Constant.hashes: torrentHashs.join('|')});
@@ -406,7 +404,7 @@ class QbitTorrentControllerImpl implements QbitTorrentController {
   }
 
   @override
-  Future recheckTorrent(String torrentHash) async {
+  Future<void> recheckTorrent(String torrentHash) async {
     Response resp = await session.post(
         '${_apiURL}${QbitTorrentApiEndPoint.API_TORRENT_RECHECK}',
         body: {Constant.hashes: torrentHash});
@@ -493,7 +491,8 @@ class QbitTorrentControllerImpl implements QbitTorrentController {
   }
 
   @override
-  Future addTorrentTrackers(String torrentHash, List<String> trackers) async {
+  Future<void> addTorrentTrackers(String torrentHash,
+      List<String> trackers) async {
     Response resp = await session.post(
         '${_apiURL}${QbitTorrentApiEndPoint.API_TORRENT_ADD_TRACKERS}',
         body: {
@@ -505,7 +504,7 @@ class QbitTorrentControllerImpl implements QbitTorrentController {
 
   ///See docs for response code meaning
   @override
-  Future editTorrentTrackers(String torrentHash, List<String> oldTrackers,
+  Future<void> editTorrentTrackers(String torrentHash, List<String> oldTrackers,
       List<String> newTrackers) async {
     Response resp = await session.post(
         '${_apiURL}${QbitTorrentApiEndPoint.API_TORRENT_EDIT_TRACKERS}',
@@ -519,7 +518,7 @@ class QbitTorrentControllerImpl implements QbitTorrentController {
 
   ///See docs for response code meaning
   @override
-  Future removeTorrentTrackers(
+  Future<void> removeTorrentTrackers(
       String torrentHash, List<String> trackers) async {
     Response resp = await session.post(
         '${_apiURL}${QbitTorrentApiEndPoint.API_TORRENT_REMOVE_TRACKERS}',
@@ -529,7 +528,8 @@ class QbitTorrentControllerImpl implements QbitTorrentController {
 
   /// Returns true if successfully added
   @override
-  Future addTorrentPeers(List<String> torrentHashes, List<String> peers) async {
+  Future<void> addTorrentPeers(List<String> torrentHashes,
+      List<String> peers) async {
     Response resp = await session.post(
         '${_apiURL}${QbitTorrentApiEndPoint.API_TORRENT_ADD_PEERS}',
         body: {
@@ -541,22 +541,22 @@ class QbitTorrentControllerImpl implements QbitTorrentController {
   }
 
   @override
-  Future startTorrent(String torrentHash) async {
+  Future<void> startTorrent(String torrentHash) async {
     await resumeTorrent(torrentHash);
   }
 
   @override
-  Future startMultipleTorrents(List<String> torrentHashes) async {
+  Future<void> startMultipleTorrents(List<String> torrentHashes) async {
     await resumeMultipleTorrents(torrentHashes);
   }
 
   @override
-  Future stopTorrent(String torrentHash) async {
+  Future<void> stopTorrent(String torrentHash) async {
     await pauseTorrent(torrentHash);
   }
 
   @override
-  Future stopMultipleTorrents(List<String> torrentHashes) async {
+  Future<void> stopMultipleTorrents(List<String> torrentHashes) async {
     await pauseMultipleTorrents(torrentHashes);
   }
 
@@ -566,39 +566,37 @@ class QbitTorrentControllerImpl implements QbitTorrentController {
   }
 
   @override
-  Future pauseAllTorrents() async {
+  Future<void> pauseAllTorrents() async {
     await pauseMultipleTorrents([Constant.all]);
   }
 
   @override
-  Future recheckAllTorrents() async {
+  Future<void> recheckAllTorrents() async {
     await recheckMultipleTorrents([Constant.all]);
   }
 
   @override
-  Future removeAllTorrents() async {
+  Future<void> removeAllTorrents() async {
     await removeMultipleTorrents([Constant.all]);
   }
 
   @override
-  Future resumeAllTorrents() async {
+  Future<void> resumeAllTorrents() async {
     await resumeMultipleTorrents([Constant.all]);
   }
 
   @override
-  Future startAllTorrents() async {
+  Future<void> startAllTorrents() async {
     await startMultipleTorrents([Constant.all]);
   }
 
   @override
-  Future stopAllTorrents() async {
+  Future<void> stopAllTorrents() async {
     await stopMultipleTorrents([Constant.all]);
   }
 
-  // TODO : TEST ALL THE BELOW METHODS
-
   @override
-  Future addNewCategory(String category, String savePath) async {
+  Future<void> addNewCategory(String category, String savePath) async {
     Response resp = await session.post(
         '${_apiURL}${QbitTorrentApiEndPoint.API_TORRENT_CREATE_CATEGORY}',
         body: {Constant.category: category, Constant.savePath: savePath});
@@ -607,7 +605,8 @@ class QbitTorrentControllerImpl implements QbitTorrentController {
   }
 
   @override
-  Future addTorrentTags(List<String> torrentHashes, List<String> tags) async {
+  Future<void> addTorrentTags(List<String> torrentHashes,
+      List<String> tags) async {
     Response resp = await session.post(
         '${_apiURL}${QbitTorrentApiEndPoint.API_TORRENT_ADD_TAGS}',
         body: {
@@ -635,35 +634,35 @@ class QbitTorrentControllerImpl implements QbitTorrentController {
   }
 
   @override
-  Future decreasePriority(List<String> torrentHashes) async {
+  Future<void> decreasePriority(List<String> torrentHashes) async {
     await _sendPostAndCheckResponse(
         QbitTorrentApiEndPoint.API_TORRENT_DECREASE_PRIORITY,
         body: {Constant.hashes: torrentHashes.join('|')});
   }
 
   @override
-  Future editCategory(String category, String newSavePath) async {
+  Future<void> editCategory(String category, String newSavePath) async {
     await _sendPostAndCheckResponse(
         QbitTorrentApiEndPoint.API_TORRENT_EDIT_CATEGORY,
         body: {Constant.category: category, Constant.savePath: newSavePath});
   }
 
   @override
-  Future forceStartTorrent(String torrentHash) async {
+  Future<void> forceStartTorrent(String torrentHash) async {
     await _sendPostAndCheckResponse(
         QbitTorrentApiEndPoint.API_TORRENT_SET_FORCE_START,
         body: {Constant.hashes: torrentHash});
   }
 
   @override
-  Future forceStartMultipleTorrents(List<String> torrentHashes) async {
+  Future<void> forceStartMultipleTorrents(List<String> torrentHashes) async {
     await _sendPostAndCheckResponse(
         QbitTorrentApiEndPoint.API_TORRENT_SET_FORCE_START,
         body: {Constant.hashes: torrentHashes.join('|')});
   }
 
   @override
-  Future getAllCategories() async {
+  Future<dynamic> getAllCategories() async {
     return (await _sendGetRequestAndCheckResponse(
             QbitTorrentApiEndPoint.API_TORRENT_CATEGORY))
         .body;
@@ -678,7 +677,7 @@ class QbitTorrentControllerImpl implements QbitTorrentController {
   }
 
   @override
-  Future getDownloadLimit(List<String> torrentHashes) async {
+  Future<String> getDownloadLimit(List<String> torrentHashes) async {
     Response resp = await _sendPostAndCheckResponse(
         QbitTorrentApiEndPoint.API_TORRENT_DOWNLOAD_LIMIT,
         body: {Constant.hashes: torrentHashes.join('|')});
@@ -686,12 +685,16 @@ class QbitTorrentControllerImpl implements QbitTorrentController {
   }
 
   @override
-  Future getFilesOfTorrent(String torrentHash) async {
-    // TODO : Implement this
+  Future<List<dynamic>> getFilesOfTorrent(String torrentHash) async {
+    Response resp = await _sendPostAndCheckResponse(
+        QbitTorrentApiEndPoint.API_TORRENT_FILES, body: {
+      Constant.hash: torrentHash,
+    });
+    return json.decode(resp.body);
   }
 
   @override
-  Future getUploadLimit(List<String> torrentHashes) async {
+  Future<String> getUploadLimit(List<String> torrentHashes) async {
     Response resp = await _sendPostAndCheckResponse(
         QbitTorrentApiEndPoint.API_TORRENT_UPLOAD_LIMIT,
         body: {Constant.hashes: torrentHashes.join('|')});
@@ -699,19 +702,19 @@ class QbitTorrentControllerImpl implements QbitTorrentController {
   }
 
   @override
-  Future increasePriority(List<String> torrentHashes) async {
+  Future<void> increasePriority(List<String> torrentHashes) async {
     await _sendPostAndCheckResponse(
         QbitTorrentApiEndPoint.API_TORRENT_INCREASE_PRIORITY,
         body: {Constant.hashes: torrentHashes.join('|')});
   }
 
   @override
-  Future removeTorrentAndData(String torrentHash) async {
+  Future<void> removeTorrentAndData(String torrentHash) async {
     await removeMultipleTorrentsAndData([torrentHash]);
   }
 
   @override
-  Future removeMultipleTorrentsAndData(List<String> torrentHashes) async {
+  Future<void> removeMultipleTorrentsAndData(List<String> torrentHashes) async {
     await _sendPostAndCheckResponse(QbitTorrentApiEndPoint.API_TORRENT_DELETE,
         body: {
           Constant.hashes: torrentHashes.join('|'),
@@ -720,7 +723,7 @@ class QbitTorrentControllerImpl implements QbitTorrentController {
   }
 
   @override
-  Future removeCategories(List<String> categories) async {
+  Future<void> removeCategories(List<String> categories) async {
     await _sendPostAndCheckResponse(
         QbitTorrentApiEndPoint.API_TORRENT_REMOVE_CATEGORY,
         body: {
@@ -729,7 +732,7 @@ class QbitTorrentControllerImpl implements QbitTorrentController {
   }
 
   @override
-  Future removeTorrentTags(
+  Future<void> removeTorrentTags(
       List<String> torrentHashes, List<String> tags) async {
     await _sendPostAndCheckResponse(
         QbitTorrentApiEndPoint.API_TORRENT_DELETE_TAGS,
@@ -739,7 +742,7 @@ class QbitTorrentControllerImpl implements QbitTorrentController {
   }
 
   @override
-  Future setAutoTorrentManagement(
+  Future<void> setAutoTorrentManagement(
       List<String> torrentHashes, bool enable) async {
     await _sendPostAndCheckResponse(
         QbitTorrentApiEndPoint.API_TORRENT_SET_AUTOMANAGEMENT,
@@ -750,7 +753,7 @@ class QbitTorrentControllerImpl implements QbitTorrentController {
   }
 
   @override
-  Future setCategory(List<String> torrentHashes, String category) async {
+  Future<void> setCategory(List<String> torrentHashes, String category) async {
     await _sendPostAndCheckResponse(
         QbitTorrentApiEndPoint.API_TORRENT_SET_CATEGORY,
         body: {
@@ -760,7 +763,7 @@ class QbitTorrentControllerImpl implements QbitTorrentController {
   }
 
   @override
-  Future setTorrentDownloadLimit(
+  Future<void> setTorrentDownloadLimit(
       List<String> torrentHashes, int limitInBytesPerSecond) async {
     await _sendPostAndCheckResponse(
         QbitTorrentApiEndPoint.API_TORRENT_SET_DOWNLOAD_LIMIT,
@@ -771,7 +774,7 @@ class QbitTorrentControllerImpl implements QbitTorrentController {
   }
 
   @override
-  Future setFirstOrLastPiecePriority(List<String> torrentHashes) async {
+  Future<void> setFirstOrLastPiecePriority(List<String> torrentHashes) async {
     await _sendPostAndCheckResponse(
         QbitTorrentApiEndPoint.API_TORRENT_TOGGLE_FIRST_LAST_PRIO,
         body: {
@@ -780,7 +783,7 @@ class QbitTorrentControllerImpl implements QbitTorrentController {
   }
 
   @override
-  Future setForceStart(List<String> torrentHashes, bool value) async {
+  Future<void> setForceStart(List<String> torrentHashes, bool value) async {
     await _sendPostAndCheckResponse(
         QbitTorrentApiEndPoint.API_TORRENT_SET_FORCE_START,
         body: {
@@ -790,7 +793,7 @@ class QbitTorrentControllerImpl implements QbitTorrentController {
   }
 
   @override
-  Future setMaxPriority(List<String> torrentHashes) async {
+  Future<void> setMaxPriority(List<String> torrentHashes) async {
     await _sendPostAndCheckResponse(
         QbitTorrentApiEndPoint.API_TORRENT_TOP_PRIORITY,
         body: {
@@ -799,7 +802,7 @@ class QbitTorrentControllerImpl implements QbitTorrentController {
   }
 
   @override
-  Future setMinPriority(List<String> torrentHashes) async {
+  Future<void> setMinPriority(List<String> torrentHashes) async {
     await _sendPostAndCheckResponse(
         QbitTorrentApiEndPoint.API_TORRENT_BOTTOM_PRIORITY,
         body: {
@@ -808,13 +811,15 @@ class QbitTorrentControllerImpl implements QbitTorrentController {
   }
 
   @override
-  Future setTorrentProperties(String torrentHash,
+  Future<void> setTorrentProperties(String torrentHash,
       {Map<String, dynamic> propertiesAndValues}) async {
     //TODO : Implement this
+    throw UnimplementedError(
+        'This method is not implemented. Please use the other methods that enable setting some specific properties of the torrents');
   }
 
   @override
-  Future setShareLimit(List<String> torrentHashes, double ratioLimit,
+  Future<void> setShareLimit(List<String> torrentHashes, double ratioLimit,
       int seedingTimeLimit) async {
     await _sendPostAndCheckResponse(
         QbitTorrentApiEndPoint.API_TORRENT_SET_SHARE_LIMIT,
@@ -826,7 +831,7 @@ class QbitTorrentControllerImpl implements QbitTorrentController {
   }
 
   @override
-  Future setSuperSeeding(List<String> torrentHashes, bool value) async {
+  Future<void> setSuperSeeding(List<String> torrentHashes, bool value) async {
     await _sendPostAndCheckResponse(
         QbitTorrentApiEndPoint.API_TORRENT_SET_SUPER_SEEDING,
         body: {
@@ -836,7 +841,7 @@ class QbitTorrentControllerImpl implements QbitTorrentController {
   }
 
   @override
-  Future setTorrentName(String torrentHash, String name) async {
+  Future<void> setTorrentName(String torrentHash, String name) async {
     await _sendPostAndCheckResponse(QbitTorrentApiEndPoint.API_TORRENT_RENAME,
         body: {
           Constant.hash: torrentHash,
@@ -845,7 +850,7 @@ class QbitTorrentControllerImpl implements QbitTorrentController {
   }
 
   @override
-  Future setTorrentUploadLimit(
+  Future<void> setTorrentUploadLimit(
       List<String> torrentHashes, int limitInBytesPerSecond) async {
     await _sendPostAndCheckResponse(
         QbitTorrentApiEndPoint.API_TORRENT_SET_UPLOAD_LIMIT,
@@ -856,7 +861,7 @@ class QbitTorrentControllerImpl implements QbitTorrentController {
   }
 
   @override
-  Future setfilePriority(
+  Future<void> setfilePriority(
       String torrentHash, List<String> fileIds, int priority) async {
     await _sendPostAndCheckResponse(
         QbitTorrentApiEndPoint.API_TORRENT_SET_FILE_PRIORITY,
@@ -868,7 +873,7 @@ class QbitTorrentControllerImpl implements QbitTorrentController {
   }
 
   @override
-  Future toggleSequentialDownload(List<String> torrentHashes) async {
+  Future<void> toggleSequentialDownload(List<String> torrentHashes) async {
     await _sendPostAndCheckResponse(
         QbitTorrentApiEndPoint.API_TORRENT_TOGGLE_SEQUENTIAL_DOWNLOAD,
         body: {
@@ -876,18 +881,10 @@ class QbitTorrentControllerImpl implements QbitTorrentController {
         });
   }
 
-  // @override
-  // Future (List<String> torrentHashes) async {
-  //   await _sendPostAndCheckResponse(QbitTorrentApiEndPoint.API_TORRENT_RESUME,
-  //       body : {
-  //         Constant.hashes : torrentHashes.join('|'),
-  //       });
-  // }
-
   @override
-  Future addTorrent(String url,
+  Future<void> addTorrent(String url,
       {String torrentFileContent,
-      String savepath,
+        String savePath,
       String cookie,
       String category,
       bool skip_checking = false,
@@ -901,7 +898,7 @@ class QbitTorrentControllerImpl implements QbitTorrentController {
       bool prioritizeFirstLastPiece = false}) async {
     await addTorrents([url],
         torrentFileContent: torrentFileContent,
-        savepath: savepath,
+        savepath: savePath,
         cookie: cookie,
         category: category,
         skip_checking: skip_checking,
