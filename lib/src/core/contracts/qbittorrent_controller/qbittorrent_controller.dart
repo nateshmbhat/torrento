@@ -2,9 +2,18 @@ import 'dart:async';
 import 'package:torrento/src/core/contracts/torrent_interface.dart';
 import 'package:torrento/src/torrent_client_controllers/qbittorrent/qbittorrent_controller.dart';
 
+enum TorrentFilter {
+  all,
+  downloading,
+  completed,
+  paused,
+  active,
+  inactive,
+  resumed
+}
 
 
-/// API Doc at : https://github.com/qbittorrent/qBittorrent/wiki/Web-API-Documentation#general-information
+// API Doc at : https://github.com/qbittorrent/qBittorrent/wiki/Web-API-Documentation#general-information
 abstract class QbitTorrentController extends TorrentController {
   factory QbitTorrentController(String serverIp, int serverPort) {
     return new QbitTorrentControllerImpl(serverIp, serverPort);

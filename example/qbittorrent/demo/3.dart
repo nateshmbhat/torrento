@@ -1,5 +1,5 @@
-import 'package:torrento/src/torrent_client_controllers/qbittorrent/qbittorrent_controller.dart';
 import 'demo.dart' ; 
+import 'package:torrento/torrento.dart';
 
 // GET TORRENT LIST BASED ON THE APPLIED FILTER
 Future getTorrents() async {

@@ -8,22 +8,13 @@ import 'package:http/http.dart' as http;
 import 'package:torrento/src/torrent_client_controllers/qbittorrent/session.dart';
 import 'package:torrento/src/torrent_client_controllers/qbittorrent/utils.dart';
 
-enum TorrentFilter {
-  all,
-  downloading,
-  completed,
-  paused,
-  active,
-  inactive,
-  resumed
-}
 
 // TODO : Add method  Get and set application preferences
 
 // TODO : check if all API end points in the ApiEndPoint class are used in the implemention . Any missing end point in the implementation needs to be added to the QBitTorrentController interface
 
 class QbitTorrentControllerImpl implements QbitTorrentController {
-  /// API Doc at : https://github.com/qbittorrent/qBittorrent/wiki/Web-API-Documentation#general-information
+  // API Doc at : https://github.com/qbittorrent/qBittorrent/wiki/Web-API-Documentation#general-information
   String _serverIP;
   int _serverPort;
   String _apiURL;

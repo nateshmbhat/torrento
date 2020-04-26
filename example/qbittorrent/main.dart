@@ -1,6 +1,4 @@
-
-import 'package:torrento/src/core/contracts/qbittorrent_controller/qbittorrent_controller.dart';
-import 'package:torrento/src/torrent_client_controllers/qbittorrent/qbittorrent_controller.dart';
+import 'package:torrento/torrento.dart';
 
 
 main(List<String> args ) async{
