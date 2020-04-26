@@ -2,10 +2,13 @@
 
 [Unreleased]: https://github.com/nateshmbhat/torrento
 
-## [Unreleased]
+### [0.1.5] - April 26 2020
+Minor bug fixes and major refactor
+Updated documentation
+
 
 ## [0.1.0] - 2020-01-23
-exporte exceptions to lib user.
+export exceptions to lib user.
 added await inside all async methods
 
 ## [0.0.4] - 2020-01-20
