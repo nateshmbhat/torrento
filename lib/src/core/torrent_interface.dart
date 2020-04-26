@@ -56,5 +56,3 @@ abstract class TorrentController {
   ///Returns the URL of the documentation for the corresponding torrent api
   String getApiDocUrl();
 }
-
-

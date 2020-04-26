@@ -2,13 +2,13 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:html/parser.dart' as html;
 import 'package:http/http.dart' as http;
-import 'package:torrento/src/core/contracts/torrent_interface.dart';
+import 'package:torrento/src/core/torrent_interface.dart';
 import 'package:torrento/src/core/exceptions/exceptions.dart';
-import 'package:torrento/src/torrent_client_controllers/u_torrent/session.dart';
+import 'package:torrento/src/utorrent/session.dart';
+import 'package:meta/meta.dart';
 
 abstract class UTorrentController extends TorrentController {
-  factory UTorrentController(
-          { String serverIp,  int serverPort}) =>
+  factory UTorrentController({String serverIp, int serverPort}) =>
       _UTorrentControllerImpl(
         serverIp: serverIp,
         serverPort: serverPort,
@@ -24,23 +24,24 @@ class _UTorrentControllerImpl implements UTorrentController {
 
   Map<String, String> actions;
 
-  _UTorrentControllerImpl({ this.serverIp,  this.serverPort})
+  _UTorrentControllerImpl({this.serverIp, @required this.serverPort})
       : baseUrl = 'http://$serverIp:$serverPort/gui/' {
     assert(serverIp != null);
     assert(serverPort != null);
   }
 
+  @override
   Future<void> logIn(String username, String password) async {
     String authCredentialsBase64Encoded =
         getBase64EncodingOf(username: username, password: password);
 
-    addKVPsToSessionHeaders(<String,String>{'authorization': authCredentialsBase64Encoded});
+    addKVPsToSessionHeaders(
+        <String, String>{'authorization': authCredentialsBase64Encoded});
 
     setSessionToken(await getToken());
   }
 
-  String getBase64EncodingOf(
-      { String username,  String password}) {
+  String getBase64EncodingOf({String username, String password}) {
     return 'Basic ' + base64.encode(utf8.encode('$username:$password'));
   }
 
@@ -54,8 +55,9 @@ class _UTorrentControllerImpl implements UTorrentController {
     String token =
         html.parse(tokenResponse?.body)?.getElementById('token')?.text;
 
-    if (tokenResponse.statusCode != 200)
+    if (tokenResponse.statusCode != 200) {
       throw InvalidCredentialsException(tokenResponse);
+    }
 
     return token;
   }
@@ -64,6 +66,7 @@ class _UTorrentControllerImpl implements UTorrentController {
     _session.token = token;
   }
 
+  @override
   Future logOut() async {
     _session.clearSession();
   }
@@ -71,11 +74,14 @@ class _UTorrentControllerImpl implements UTorrentController {
   String concatenateTorrentHashhes(List<String> torrentHashes) {
     String toReturn = '';
 
-    for (String torrentHash in torrentHashes) toReturn += '&hash=$torrentHash';
+    for (String torrentHash in torrentHashes) {
+      toReturn += '&hash=$torrentHash';
+    }
 
     return toReturn;
   }
 
+  @override
   Future<http.Response> addTorrent(String torrentUrl) async {
     assert(torrentUrl != null);
 
@@ -97,6 +103,7 @@ class _UTorrentControllerImpl implements UTorrentController {
     return response;
   }
 
+  @override
   Future<http.Response> startTorrent(String torrentHash) async {
     assert(torrentHash != null);
 
@@ -107,9 +114,11 @@ class _UTorrentControllerImpl implements UTorrentController {
     return response;
   }
 
-  Future<http.Response> startMultipleTorrents(List<String> torrentHashes) async {
+  @override
+  Future<http.Response> startMultipleTorrents(
+      List<String> torrentHashes) async {
     assert(torrentHashes != null);
-    assert(torrentHashes.length != 0);
+    assert(torrentHashes.isNotEmpty);
 
     String url =
         '${baseUrl}?action=start${concatenateTorrentHashhes(torrentHashes)}';
@@ -119,6 +128,7 @@ class _UTorrentControllerImpl implements UTorrentController {
     return response;
   }
 
+  @override
   Future<http.Response> stopTorrent(String torrentHash) async {
     assert(torrentHash != null);
 
@@ -129,9 +139,10 @@ class _UTorrentControllerImpl implements UTorrentController {
     return response;
   }
 
+  @override
   Future<http.Response> stopMultipleTorrents(List<String> torrentHashes) async {
     assert(torrentHashes != null);
-    assert(torrentHashes.length != 0);
+    assert(torrentHashes.isNotEmpty);
 
     String url =
         '${baseUrl}?action=stop${concatenateTorrentHashhes(torrentHashes)}';
@@ -141,6 +152,7 @@ class _UTorrentControllerImpl implements UTorrentController {
     return response;
   }
 
+  @override
   Future<http.Response> pauseTorrent(String torrentHash) async {
     assert(torrentHash != null);
 
@@ -151,9 +163,11 @@ class _UTorrentControllerImpl implements UTorrentController {
     return response;
   }
 
-  Future<http.Response> pauseMultipleTorrents(List<String> torrentHashes) async {
+  @override
+  Future<http.Response> pauseMultipleTorrents(
+      List<String> torrentHashes) async {
     assert(torrentHashes != null);
-    assert(torrentHashes.length != 0);
+    assert(torrentHashes.isNotEmpty);
 
     String url =
         '${baseUrl}?action=pause${concatenateTorrentHashhes(torrentHashes)}';
@@ -173,9 +187,10 @@ class _UTorrentControllerImpl implements UTorrentController {
     return response;
   }
 
-  Future<http.Response> unpauseMultipleTorrents(List<String> torrentHashes) async {
+  Future<http.Response> unpauseMultipleTorrents(
+      List<String> torrentHashes) async {
     assert(torrentHashes != null);
-    assert(torrentHashes.length != 0);
+    assert(torrentHashes.isNotEmpty);
 
     String url =
         '${baseUrl}?action=unpause${concatenateTorrentHashhes(torrentHashes)}';
@@ -185,6 +200,7 @@ class _UTorrentControllerImpl implements UTorrentController {
     return response;
   }
 
+  @override
   Future<http.Response> forceStartTorrent(String torrentHash) async {
     assert(torrentHash != null);
 
@@ -195,9 +211,11 @@ class _UTorrentControllerImpl implements UTorrentController {
     return response;
   }
 
-  Future<http.Response> forceStartMultipleTorrents(List<String> torrentHashes) async {
+  @override
+  Future<http.Response> forceStartMultipleTorrents(
+      List<String> torrentHashes) async {
     assert(torrentHashes != null);
-    assert(torrentHashes.length != 0);
+    assert(torrentHashes.isNotEmpty);
 
     String url =
         '${baseUrl}?action=forcestart${concatenateTorrentHashhes(torrentHashes)}';
@@ -221,7 +239,7 @@ class _UTorrentControllerImpl implements UTorrentController {
   @override
   Future resumeMultipleTorrents(List<String> torrentHashes) async {
     assert(torrentHashes != null);
-    assert(torrentHashes.length != 0);
+    assert(torrentHashes.isNotEmpty);
 
     String url =
         '${baseUrl}?action=resume${concatenateTorrentHashhes(torrentHashes)}';
@@ -231,6 +249,7 @@ class _UTorrentControllerImpl implements UTorrentController {
     return response;
   }
 
+  @override
   Future<http.Response> recheckTorrent(String torrentHash) async {
     assert(torrentHash != null);
 
@@ -241,9 +260,11 @@ class _UTorrentControllerImpl implements UTorrentController {
     return response;
   }
 
-  Future<http.Response> recheckMultipleTorrents(List<String> torrentHashes) async {
+  @override
+  Future<http.Response> recheckMultipleTorrents(
+      List<String> torrentHashes) async {
     assert(torrentHashes != null);
-    assert(torrentHashes.length != 0);
+    assert(torrentHashes.isNotEmpty);
 
     String url =
         '${baseUrl}?action=recheck${concatenateTorrentHashhes(torrentHashes)}';
@@ -253,6 +274,7 @@ class _UTorrentControllerImpl implements UTorrentController {
     return response;
   }
 
+  @override
   Future<http.Response> removeTorrent(String torrentHash) async {
     assert(torrentHash != null);
 
@@ -263,9 +285,11 @@ class _UTorrentControllerImpl implements UTorrentController {
     return response;
   }
 
-  Future<http.Response> removeMultipleTorrents(List<String> torrentHashes) async {
+  @override
+  Future<http.Response> removeMultipleTorrents(
+      List<String> torrentHashes) async {
     assert(torrentHashes != null);
-    assert(torrentHashes.length != 0);
+    assert(torrentHashes.isNotEmpty);
 
     String url =
         '$baseUrl?action=remove${concatenateTorrentHashhes(torrentHashes)}';
@@ -275,6 +299,7 @@ class _UTorrentControllerImpl implements UTorrentController {
     return response;
   }
 
+  @override
   Future<http.Response> removeTorrentAndData(String torrentHash) async {
     assert(torrentHash != null);
 
@@ -285,10 +310,11 @@ class _UTorrentControllerImpl implements UTorrentController {
     return response;
   }
 
+  @override
   Future<http.Response> removeMultipleTorrentsAndData(
       List<String> torrentHashes) async {
     assert(torrentHashes != null);
-    assert(torrentHashes.length != 0);
+    assert(torrentHashes.isNotEmpty);
 
     String url =
         '${baseUrl}?action=removedata${concatenateTorrentHashhes(torrentHashes)}';
@@ -298,6 +324,7 @@ class _UTorrentControllerImpl implements UTorrentController {
     return response;
   }
 
+  @override
   Future<List<dynamic>> getTorrentsList() async {
     http.Response response = await _session.get('$baseUrl?list=1');
 
@@ -319,8 +346,7 @@ class _UTorrentControllerImpl implements UTorrentController {
   }
 
   @override
-  Future<dynamic> getFilesOfTorrent(
-      String torrentHash) async {
+  Future<dynamic> getFilesOfTorrent(String torrentHash) async {
     String url = '${baseUrl}?action=getfiles&hash=${torrentHash}';
 
     http.Response response = await _session.get(url);

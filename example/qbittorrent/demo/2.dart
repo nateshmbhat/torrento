@@ -1,4 +1,4 @@
-import 'demo.dart' ;
+import 'demo.dart';
 
 // GET TORRENT LIST
 Future getTorrents() async {
@@ -7,10 +7,10 @@ Future getTorrents() async {
   torrents.forEach((t) => print('${t['name']}    -    ${t['hash']}'));
 }
 
-main(List<String> args) async {
+void main(List<String> args) async {
   await obj.logIn('natesh', 'password');
 
-  getTorrents() ; 
+  await getTorrents();
 
   await obj.logOut();
 }

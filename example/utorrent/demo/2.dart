@@ -1,16 +1,16 @@
-import 'demo.dart' ;
+import 'demo.dart';
 
 // GET TORRENT LIST
 Future getTorrents() async {
   var torrents = await obj.getTorrentsList();
 
-  torrents.forEach((t) => print(t)) ;
+  torrents.forEach((t) => print(t));
 }
 
-main() async {
+void main() async {
   await obj.logIn('natesh', 'password');
 
-  await getTorrents() ; 
+  await getTorrents();
 
   await obj.logOut();
 }
