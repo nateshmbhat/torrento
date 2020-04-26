@@ -1,7 +1,8 @@
-import 'package:torrento/src/torrent_client_controllers/u_torrent/u_torrent_controller.dart';
+import 'package:torrento/src/utorrent/u_torrent_controller.dart';
 
-UTorrentController obj = new UTorrentController(serverIp : '192.168.43.18' , serverPort :  5000) ; 
+UTorrentController obj =
+    UTorrentController(serverIp: '192.168.43.18', serverPort: 5000);
 
-main() async {
-  await obj.logIn('natesh' , 'password') ; 
+void main() async {
+  await obj.logIn('natesh', 'password');
 }

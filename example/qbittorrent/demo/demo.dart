@@ -1,7 +1,7 @@
-import 'package:torrento/src/core/contracts/qbittorrent_controller/qbittorrent_controller.dart';
+import 'package:torrento/src/qbittorrent/qbittorrent_interface/qbittorrent_controller.dart';
 
-QbitTorrentController obj = new QbitTorrentController('192.168.43.51' , 8080) ; 
+QbitTorrentController obj = QbitTorrentController('192.168.43.51', 8080);
 
-main() async {
-  await obj.logIn('natesh' , 'password') ; 
+void main() async {
+  await obj.logIn('natesh', 'password');
 }

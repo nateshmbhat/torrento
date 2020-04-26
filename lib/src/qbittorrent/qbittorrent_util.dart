@@ -1,5 +1,4 @@
-
-class ApiEndPoint{
+class QbitTorrentApiEndPoint {
   static final API_AUTH_LOGIN = '/auth/login';
   static final API_AUTH_LOGOUT = '/auth/logout';
 
@@ -19,12 +18,13 @@ class ApiEndPoint{
 
   static final API_TRANSFER_INFO = '/transfer/info';
   static final API_TRANSFER_SPEED_LIMITS_MODE = '/transfer/speedLimitsMode';
-  static final API_TRANSFER_TOGGLE_SPEED_LIMITS = '/transfer/toggleSpeedLimitsMode';
+  static final API_TRANSFER_TOGGLE_SPEED_LIMITS =
+      '/transfer/toggleSpeedLimitsMode';
   static final API_TRANSFER_DOWNLOAD_LIMIT = '/transfer/downloadLimit';
   static final API_TRANSFER_SET_DOWNLOAD_LIMIT = '/transfer/setDownloadLimit';
   static final API_TRANSFER_UPLOAD_LIMIT = '/transfer/uploadLimit';
   static final API_TRANSFER_SET_UPLOAD_LIMIT = '/transfer/setUploadLimit';
-  static final API_TRANSFER_BAN_PEERS= '/transfer/banPeers';
+  static final API_TRANSFER_BAN_PEERS = '/transfer/banPeers';
 
   static final API_TORRENT_INFO = '/torrents/info';
   static final API_TORRENT_PROPERTIES = '/torrents/properties';
@@ -43,7 +43,7 @@ class ApiEndPoint{
   static final API_TORRENT_ADD_PEERS = '/torrents/addPeers';
   static final API_TORRENT_EDIT_TRACKERS = '/torrents/editTracker';
 
-  static final API_TORRENT_REMOVE_TRACKERS = '/torrents/removeTrackers' ; 
+  static final API_TORRENT_REMOVE_TRACKERS = '/torrents/removeTrackers';
 
   static final API_TORRENT_INCREASE_PRIORITY = '/torrents/increasePrio';
   static final API_TORRENT_DECREASE_PRIORITY = '/torrents/decreasePrio';
@@ -96,7 +96,4 @@ class ApiEndPoint{
   static final API_SEARCH_UNINSTALL_PLUGIN = '/search/uninstallPlugin';
   static final API_SEARCH_ENABLE_PLUGIN = '/search/enablePlugin';
   static final API_SEARCH_UPDATE_PLUGINS = '/search/updatePlugins';
-
-
-
 }

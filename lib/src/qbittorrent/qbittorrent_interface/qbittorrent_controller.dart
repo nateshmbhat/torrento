@@ -1,6 +1,6 @@
 import 'dart:async';
-import 'package:torrento/src/core/contracts/torrent_interface.dart';
-import 'package:torrento/src/torrent_client_controllers/qbittorrent/qbittorrent_controller.dart';
+import 'package:torrento/src/core/torrent_interface.dart';
+import 'package:torrento/src/qbittorrent/qbittorrent_controller.dart';
 
 enum TorrentFilter {
   all,
@@ -12,11 +12,10 @@ enum TorrentFilter {
   resumed
 }
 
-
 // API Doc at : https://github.com/qbittorrent/qBittorrent/wiki/Web-API-Documentation#general-information
 abstract class QbitTorrentController extends TorrentController {
   factory QbitTorrentController(String serverIp, int serverPort) {
-    return new QbitTorrentControllerImpl(serverIp, serverPort);
+    return QbitTorrentControllerImpl(serverIp, serverPort);
   }
 
   Future stopAllTorrents();
@@ -26,9 +25,11 @@ abstract class QbitTorrentController extends TorrentController {
   Future removeAllTorrents();
   Future resumeAllTorrents();
 
+  @override
   Future stopTorrent(String torrentHash);
 
   /// param torrentHashes is an array of torrent hashes or ['all'] for all torrents
+  @override
   Future stopMultipleTorrents(List<String> torrentHashes);
 
   Future<bool> isLoggedIn();
@@ -79,6 +80,7 @@ abstract class QbitTorrentController extends TorrentController {
   Future<String> banPeers(List<String> peers);
 
   /// Get a list of torrents based on the filters and applied parameters. See api docs for more info on response object
+  @override
   Future<List> getTorrentsList(
       {TorrentFilter filter,
       String category,
@@ -89,6 +91,7 @@ abstract class QbitTorrentController extends TorrentController {
       List<String> hashes});
 
   /// Get torrent generic properties
+  @override
   Future<dynamic> getTorrentProperties(String torrentHash);
 
   Future<dynamic> getTorrentTrackers(String torrentHash);
@@ -99,6 +102,7 @@ abstract class QbitTorrentController extends TorrentController {
   Future<dynamic> getTorrentPieceHashes(String torrentHash);
 
   /// param torrentHashes is an array of torrent hashes or ['all'] for all torrents
+  @override
   Future pauseMultipleTorrents(List<String> torrentHashs);
 
   /// param torrentHashes is an array of torrent hashes or ['all'] for all torrents
@@ -111,10 +115,10 @@ abstract class QbitTorrentController extends TorrentController {
   //Params :
   /// urls : list of URLs
   ///torrents : Raw data of torrent file. torrents can be presented multiple times.
-  Future addTorrent(String url , 
-      {
- String torrentFileContent,
-        String savepath,
+  @override
+  Future addTorrent(String url,
+      {String torrentFileContent,
+      String savepath,
       String cookie,
       String category,
       bool skip_checking = false,
@@ -127,15 +131,13 @@ abstract class QbitTorrentController extends TorrentController {
       bool sequentialDownload = false,
       bool prioritizeFirstLastPiece = false});
 
-
   /// Add new torrents
   ///Params :
   /// urls : list of URLs
   ///torrents : Raw data of torrent file. torrents can be presented multiple times.
-  Future addTorrents(List<String> urls ,
-      {
-      String torrentFileContent,
-        String savepath,
+  Future addTorrents(List<String> urls,
+      {String torrentFileContent,
+      String savepath,
       String cookie,
       String category,
       bool skip_checking = false,
@@ -187,10 +189,12 @@ abstract class QbitTorrentController extends TorrentController {
   Future setTorrentDownloadLimit(
       List<String> torrentHashes, int limitInBytesPerSecond);
 
-  Future setShareLimit(List<String> torrentHashes, double ratioLimit, int seedingTimeLimit);
+  Future setShareLimit(
+      List<String> torrentHashes, double ratioLimit, int seedingTimeLimit);
 
   Future<dynamic> getUploadLimit(List<String> torrentHashes);
-  Future setTorrentUploadLimit(List<String> torrentHashes, int limitInBytesPerSecond);
+  Future setTorrentUploadLimit(
+      List<String> torrentHashes, int limitInBytesPerSecond);
 
   Future setTorrentName(String torrentHash, String name);
 
